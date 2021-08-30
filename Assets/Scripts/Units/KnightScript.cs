@@ -6,6 +6,6 @@ namespace Ziggurat.Units
 {
     public class KnightScript : BaseMelee
     {
-        
+        public override string Name => "Knight";
     }
 }

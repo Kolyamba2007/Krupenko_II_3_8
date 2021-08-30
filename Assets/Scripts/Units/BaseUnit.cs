@@ -7,7 +7,7 @@ namespace Ziggurat.Units
     [RequireComponent(typeof(Collider))]
     public abstract class BaseUnit : MonoBehaviour, IUnit
     {
-        public string Name => transform.name;
+        public abstract string Name { get; }
         public Vector3 Position { protected set; get; }
         public abstract UnitType UnitType { get; }
         public Vector3 Target { protected set; get; }

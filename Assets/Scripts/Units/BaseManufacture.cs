@@ -18,6 +18,7 @@ namespace Ziggurat.Units
         public IUnit ProduceUnit<T>() where T : IUnit
         {
             IsManufacturing = true;
+            ProgressBar.ProductName = typeof(T).Name;
             return null;
         }
         public void Abort()
