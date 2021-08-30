@@ -8,43 +8,43 @@ namespace Ziggurat
     /// Данные статуса
     /// </summary>
     [Serializable]
-    public class StatusDataArgs
-    {
-        /// <summary>
-        /// Название статуса
-        /// </summary>
-        public string Name { get; }
-        /// <summary>
-        /// Длительность в секундах
-        /// </summary>
-        public float Duration { get; }
-        /// <summary>
-        /// Целевой объект статуса
-        /// </summary>
-        public BaseUnit Target { get; }
-        /// <summary>
-        /// Источник статуса
-        /// </summary>
-        public BaseUnit Source { get; }
-        /// <summary>
-        /// Количество циклов
-        /// </summary>
-        public int Count;
-        /// <summary>
-        /// Тип статуса
-        /// </summary>
-        public StatusType Type { get; }
+    //public class StatusDataArgs
+    //{
+    //    /// <summary>
+    //    /// Название статуса
+    //    /// </summary>
+    //    public string Name { get; }
+    //    /// <summary>
+    //    /// Длительность в секундах
+    //    /// </summary>
+    //    public float Duration { get; }
+    //    /// <summary>
+    //    /// Целевой объект статуса
+    //    /// </summary>
+    //    public BaseUnit Target { get; }
+    //    /// <summary>
+    //    /// Источник статуса
+    //    /// </summary>
+    //    public BaseUnit Source { get; }
+    //    /// <summary>
+    //    /// Количество циклов
+    //    /// </summary>
+    //    public int Count;
+    //    /// <summary>
+    //    /// Тип статуса
+    //    /// </summary>
+    //    public StatusType Type { get; }
 
-        /// <summary>
-        /// Текущее оставшееся время действия статуса
-        /// </summary>
-        public float CurrentDuration { get; set; }
+    //    /// <summary>
+    //    /// Текущее оставшееся время действия статуса
+    //    /// </summary>
+    //    public float CurrentDuration { get; set; }
 
-        public StatusDataArgs(string name, float duraction, BaseUnit target, BaseUnit source, StatusType type)
-        {
-            Name = name; Duration = CurrentDuration = duraction; Target = target; Source = source; Type = type;
-        }
-    }
+    //    public StatusDataArgs(string name, float duraction, BaseUnit target, BaseUnit source, StatusType type)
+    //    {
+    //        Name = name; Duration = CurrentDuration = duraction; Target = target; Source = source; Type = type;
+    //    }
+    //}
     public struct WeightData
     {
         public ActionType[] BotActions;
