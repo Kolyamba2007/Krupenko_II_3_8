@@ -1,0 +1,10 @@
+﻿<?xml-version ="1.0" encoding="urf-8"?>
+<Configs>
+  <Units>
+    <Unit Type ="Melee" Actions = "Idle Move FastAttack StrongAttack Impact"/>
+    <Unit Type ="Range" Actions = "Idle Move Shoot Impact"/>
+    <Unit Type ="Flying" Actions = "Idle Move Shoot Impact"/>
+    <Unit Type ="Building" Actions = "Idle Produce Impact"/>
+    <Unit Type ="None" Actions = "Idle Impact"/>
+  </Units>
+</Configs>
