@@ -11,11 +11,8 @@ namespace Ziggurat.UI
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            var targetInfo = property.serializedObject.targetObject.GetType().GetField(property.name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            var targetInfo = property.serializedObject.targetObject.GetType().GetField(property.name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             object target = targetInfo.GetValue(property.serializedObject.targetObject);
-
-            var visibleInfo = target.GetType().GetProperty("Visible", BindingFlags.Public | BindingFlags.Instance);
-            bool visible = (bool)visibleInfo.GetValue(target);
 
             var productNameInfo = target.GetType().GetProperty("ProductName", BindingFlags.Public | BindingFlags.Instance);
             string productName = productNameInfo.GetValue(target).ToString();
