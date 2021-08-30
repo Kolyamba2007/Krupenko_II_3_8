@@ -2,9 +2,14 @@
 
 namespace Ziggurat.Units
 {
+    [RequireComponent(typeof(Animator))]
+    [RequireComponent(typeof(Rigidbody))]
     public abstract class BaseMelee : BaseUnit, IMovable
     {
         public override UnitType UnitType => UnitType.Melee;
+
+        private Animator Animator { set; get; }
+        private Rigidbody Rigidbody { set; get; }
 
         public bool CanMove { protected set; get; }
 

@@ -9,10 +9,11 @@ namespace Ziggurat.UI
         private float _value = 0f;
 
         public string ProductName { set; get; } = "Юнит";
-        public float Value
+        public float Value => _value;
+
+        public void SetValue(float value)
         {
-            set => _value = Mathf.Clamp01(value);
-            get => _value;
+            _value = Mathf.Clamp01(value);
         }
     }
 }

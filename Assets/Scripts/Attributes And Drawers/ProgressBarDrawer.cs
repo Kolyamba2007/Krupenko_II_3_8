@@ -17,7 +17,7 @@ namespace Ziggurat.UI
             var productNameInfo = target.GetType().GetProperty("ProductName", BindingFlags.Public | BindingFlags.Instance);
             string productName = productNameInfo.GetValue(target).ToString();
 
-            var valueInfo = target.GetType().GetProperty("Value", BindingFlags.Public | BindingFlags.Instance);
+            var valueInfo = target.GetType().GetProperty("Value", BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty);
             float value = (float)valueInfo.GetValue(target);
             EditorGUI.ProgressBar(position, value, productName + $" ({value * 100}%)");
         }
