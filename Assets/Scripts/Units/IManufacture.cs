@@ -1,7 +1,13 @@
-﻿namespace Ziggurat.Units
+﻿using Ziggurat.UI;
+
+namespace Ziggurat.Units
 {
     public interface IManufacture
     {
-        IUnit Produce<T>() where T : IUnit;
+        bool IsManufacturing { get; }
+        float ProductionProgress { get; }
+
+        IUnit ProduceUnit<T>() where T : IUnit;
+        void Abort();
     }
 }
