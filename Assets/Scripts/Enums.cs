@@ -1,0 +1,244 @@
+﻿using System;
+
+namespace Ziggurat
+{
+    /// <summary>
+    /// Виды действий
+    /// </summary>
+    public enum ActionType : byte
+    {
+        /// <summary>
+        /// Ожидание
+        /// </summary>
+        Idle = 0,
+        /// <summary>
+        /// Ходьба
+        /// </summary>
+        Move = 1,
+        /// <summary>
+        /// Быстрая атака
+        /// </summary>
+        FastAttack = 20,
+        /// <summary>
+        /// Сильная атака
+        /// </summary>
+        StrongAttack = 21,
+        /// <summary>
+        /// Контратака
+        /// </summary>
+        CounterAttack = 24,
+        /// <summary>
+        /// Блокирование
+        /// </summary>
+        Block = 40,
+        /// <summary>
+        /// Атакующая способность
+        /// </summary>
+        AttackAbility = 60,
+        Die = 65,
+        Impact = 70,
+    }
+
+    /// <summary>
+    /// Типы поведения
+    /// </summary>
+    public enum BehaviourType : byte
+    {
+        Idle = 0,
+        Move = 1,
+        Seek = 2,
+        Attack = 3,
+        Wander = 4,
+    }
+
+    /// <summary>
+    /// Типы дистанции
+    /// </summary>
+    public enum DistanceType : byte
+    {
+        /// <summary>
+        /// Неопределенная
+        /// </summary>
+        Indefinite = 0,
+        /// <summary>
+        /// Тесное взаимодействие
+        /// </summary>
+        Melee = 1,
+        /// <summary>
+        /// Дальняя конфронтация
+        /// </summary>
+        Ranged = 2,
+        /// <summary>
+        /// Свободное расстояние
+        /// </summary>
+        Spell = 3
+    }
+
+    /// <summary>
+    /// Паттерны поведения бота
+    /// </summary>
+    public enum AIPattern : byte
+    {
+        /// <summary>
+        /// Простой
+        /// </summary>
+        Simple = 0,
+        /// <summary>
+        /// Защищающийся
+        /// </summary>
+        Defender = 10,
+        /// <summary>
+        /// Контратакующий
+        /// </summary>
+        CounterDefender = 11,
+        /// <summary>
+        /// Быстро атакующий
+        /// </summary>
+        FastAttacker = 20,
+        /// <summary>
+        /// Сокрушающий
+        /// </summary>
+        StrongAttacker = 21,
+        /// <summary>
+        /// Дальний
+        /// </summary>
+        Further = 30,
+        /// <summary>
+        /// Поддерживающий
+        /// </summary>
+        Support = 40,
+        /// <summary>
+        /// Маг
+        /// </summary>
+        Mage = 50,
+    }
+
+    /// <summary>
+    /// Тип действия статуса
+    /// </summary>
+    public enum StatusType : byte
+    {
+        /// <summary>
+        /// Одноразовый
+        /// </summary>
+        Single = 0,
+        /// <summary>
+        /// Постоянный
+        /// </summary>
+        Persistance = 1,
+        /// <summary>
+        /// Зацикленный
+        /// </summary>
+        Looping = 2,
+        /// <summary>
+        /// Серийный
+        /// </summary>
+        Series = 3
+    }
+
+    /// <summary>
+    /// Состояние статуса
+    /// </summary>
+    public enum StateStatusType : byte
+    {
+        /// <summary>
+        /// Активация
+        /// </summary>
+        Create,
+        /// <summary>
+        /// Начало работы
+        /// </summary>
+        Start,
+        /// <summary>
+        /// Завершение
+        /// </summary>
+        Finish
+    }
+
+    /// <summary>
+    /// Типы юнитов
+    /// </summary>
+    public enum UnitType : byte
+    {
+        /// <summary>
+        /// Неопределенный тип юнита
+        /// </summary>
+        None = 0,
+        /// <summary>
+        /// Юнит ближнего боя
+        /// </summary>
+        Melee = 1,
+        /// <summary>
+        /// Юнит дальнего боя
+        /// </summary>
+        Range = 2,
+        /// <summary>
+        /// Воздушная боевая единица
+        /// </summary>
+        Flying = 3,
+        /// <summary>
+        /// Строение
+        /// </summary>
+        Building = 4,
+    }
+
+    /// <summary>
+    /// Типы результатов действия
+    /// </summary>
+    public enum ActionResultType : byte
+    {
+        /// <summary>
+        /// Неопределённый результат
+        /// </summary>
+        None,
+        /// <summary>
+        /// Прервано
+        /// </summary>
+        Interrupted,
+        /// <summary>
+        /// Неудачно
+        /// </summary>
+        Failed,
+        /// <summary>
+        /// Успешно
+        /// </summary>
+        Successfully,
+        /// <summary>
+        /// Завершен
+        /// </summary>
+        Completed,
+    }
+    public enum AttackResultType
+    {
+        /// <summary>
+        /// Неопределённый результат
+        /// </summary>
+        None,
+        /// <summary>
+        /// Был совершён промах
+        /// </summary>
+        Missed,
+        /// <summary>
+        /// Обычный удар
+        /// </summary>
+        Normal,
+        /// <summary>
+        /// Был нанесён критический удар
+        /// </summary>
+        Critical
+    }
+
+    [Flags]
+    public enum IgnoreAxisType : byte
+    {
+        None = 0,
+        X = 1,
+        Y = 2,
+        Z = 4
+    }
+
+    /// <summary>
+    /// Владелец юнита.
+    /// </summary>
+    public enum Owner { Red, Green, Blue, Neutral }
+}
