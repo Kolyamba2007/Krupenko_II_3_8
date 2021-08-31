@@ -9,7 +9,7 @@ namespace Ziggurat.Units
         string Name { get; }
         Vector3 Position { get; }
         UnitType UnitType { get; }
-        Vector3 Target { get; }
+        Vector3? Target { get; }
         #endregion
 
         #region Statuses
@@ -20,7 +20,7 @@ namespace Ziggurat.Units
         /// <summary>
         /// Неуязвимый
         /// </summary>
-        bool Invincible { get; }
+        bool Invulnerable { get; }
         /// <summary>
         /// Выделяем
         /// </summary>
@@ -40,6 +40,8 @@ namespace Ziggurat.Units
         /// Владелец юнита
         /// </summary>
         Owner Owner { get; }
+
+        UnitState CurrentState { get; }
         #endregion
         
         #region Events
@@ -51,6 +53,8 @@ namespace Ziggurat.Units
         bool SetDamage(byte value);
         bool SetDamage(ushort value);
         bool IsAllied(IUnit unit);
+
+        void Idle();
         #endregion
     }
 }

@@ -42,7 +42,7 @@ namespace Ziggurat
     /// <summary>
     /// Типы поведения
     /// </summary>
-    public enum BehaviourType : byte
+    public enum UnitState : byte
     {
         Idle = 0,
         Move = 1,
@@ -111,48 +111,6 @@ namespace Ziggurat
         /// Маг
         /// </summary>
         Mage = 50,
-    }
-
-    /// <summary>
-    /// Тип действия статуса
-    /// </summary>
-    public enum StatusType : byte
-    {
-        /// <summary>
-        /// Одноразовый
-        /// </summary>
-        Single = 0,
-        /// <summary>
-        /// Постоянный
-        /// </summary>
-        Persistance = 1,
-        /// <summary>
-        /// Зацикленный
-        /// </summary>
-        Looping = 2,
-        /// <summary>
-        /// Серийный
-        /// </summary>
-        Series = 3
-    }
-
-    /// <summary>
-    /// Состояние статуса
-    /// </summary>
-    public enum StateStatusType : byte
-    {
-        /// <summary>
-        /// Активация
-        /// </summary>
-        Create,
-        /// <summary>
-        /// Начало работы
-        /// </summary>
-        Start,
-        /// <summary>
-        /// Завершение
-        /// </summary>
-        Finish
     }
 
     /// <summary>
