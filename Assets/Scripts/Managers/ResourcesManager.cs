@@ -11,12 +11,12 @@ namespace Ziggurat.Managers
         [SerializeField]
         private GameObject _zigguratPrefab;
 
-        public GameObject GetUnitByType<T>() where T : IUnit
+        public GameObject GetUnitByType(Type type)
         {
-            if (typeof(T).IsAbstract) throw new Exception();
+            if (type.IsAbstract) throw new Exception();
 
-            if (typeof(T).IsAssignableFrom(typeof(KnightScript))) return _knightPrefab;
-            if (typeof(T).IsAssignableFrom(typeof(ZigguratScript))) return _zigguratPrefab;
+            if (type.IsAssignableFrom(typeof(KnightScript))) return _knightPrefab;
+            if (type.IsAssignableFrom(typeof(ZigguratScript))) return _zigguratPrefab;
             throw new Exception();
         }
     }

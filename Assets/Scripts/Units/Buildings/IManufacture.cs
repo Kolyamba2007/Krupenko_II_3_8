@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 namespace Ziggurat.Units
 {
@@ -20,6 +21,11 @@ namespace Ziggurat.Units
         float ProductionTime { get; }
 
         /// <summary>
+        /// Точка создания юнита
+        /// </summary>
+        Transform SpawnPoint { get; }
+
+        /// <summary>
         /// Начинает производство юнита указанного типа
         /// </summary>
         /// <typeparam name="T">Тип юнита</typeparam>
@@ -31,6 +37,6 @@ namespace Ziggurat.Units
         /// </summary>
         void Abort();
 
-        event Action<BaseMelee> Manufactured;
+        event Action<Type> Manufactured;
     }
 }

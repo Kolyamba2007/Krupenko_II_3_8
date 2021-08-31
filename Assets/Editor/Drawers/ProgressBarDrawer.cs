@@ -12,19 +12,14 @@ namespace Ziggurat.UI
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            var targetInfo = property.serializedObject.targetObject.GetType().GetField(property.name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            object target = targetInfo.GetValue(property.serializedObject.targetObject);
+            string labelText = property.FindPropertyRelative("Label").stringValue;
+            float value = property.FindPropertyRelative("_value").floatValue;
 
-            var labelInfo = target.GetType().GetProperty("Label", BindingFlags.Public | BindingFlags.Instance);
-            string labelText = labelInfo.GetValue(target).ToString();
-
-            var valueInfo = target.GetType().GetProperty("Value", BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty);
-            float value = (float)Math.Round((float)valueInfo.GetValue(target), 1);
             EditorGUI.BeginChangeCheck();
-            EditorGUI.ProgressBar(position, value, labelText + $" ({value * 100}%)");
+            EditorGUI.ProgressBar(position, 0f, labelText + $" ({0 * 100}%)");
             if (EditorGUI.EndChangeCheck())
             {
-                EditorGUI.ProgressBar(position, value, labelText + $" ({value * 100}%)");
+                EditorGUI.ProgressBar(position, 0f, labelText + $" ({0 * 100}%)");
             }
         }
     }
