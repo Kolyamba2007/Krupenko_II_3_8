@@ -28,8 +28,6 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(sensitivity);
-
         Vector2 delta = controls.Camera.Rotation.ReadValue<Vector2>();
         if (delta!= Vector2.zero)
         {
