@@ -9,16 +9,16 @@ namespace Ziggurat.Units
         [SerializeField, Min(0), Tooltip("Время производства")]
         private float _productionTime;
         [SerializeField]
-        protected ProgressBar ProgressBar;      
+        protected ProgressBar ProgressBar;     
 
         public bool IsManufacturing { private set; get; } = false;
         public float ProductionProgress => ProgressBar.Value;
         public float ProductionTime { private set => _productionTime = value; get => _productionTime; }
 
-        public IUnit ProduceUnit<T>() where T : IUnit
+        public BaseMelee ProduceUnit<T>() where T : BaseMelee
         {
             IsManufacturing = true;
-            ProgressBar.ProductName = typeof(T).Name;
+            ProgressBar.SetValue(0);
             return null;
         }
         public void Abort()

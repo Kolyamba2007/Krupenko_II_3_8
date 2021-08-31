@@ -5,10 +5,12 @@ namespace Ziggurat.Units
 {
     public interface IUnit
     {
+        #region Info
         string Name { get; }
         Vector3 Position { get; }
         UnitType UnitType { get; }
         Vector3 Target { get; }
+        #endregion
 
         #region Statuses
         /// <summary>
@@ -30,6 +32,10 @@ namespace Ziggurat.Units
         /// Здоровье юнита
         /// </summary>
         ushort Health { get; }
+        /// <summary>
+        /// Владелец юнита
+        /// </summary>
+        Owner Owner { get; }
         #endregion
         
         #region Events
@@ -40,6 +46,7 @@ namespace Ziggurat.Units
         #region Methods
         bool SetDamage(byte value);
         bool SetDamage(ushort value);
+        bool IsAllied(IUnit unit);
         #endregion
     }
 }

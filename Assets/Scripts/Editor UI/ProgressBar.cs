@@ -8,7 +8,7 @@ namespace Ziggurat.UI
     {
         private float _value = 0f;
 
-        public string ProductName { set; get; } = "Юнит";
+        public string Label { set; get; } = "Progress";
         public float Value => _value;
 
         public void SetValue(float value)

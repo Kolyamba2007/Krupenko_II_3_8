@@ -4,22 +4,22 @@
 using UnityEditor;
 #endif
 
-public class ReadOnly : PropertyAttribute
+public class ReadOnlyAttribute : PropertyAttribute
 {
-    public ReadOnly()
+    public ReadOnlyAttribute()
     {
 
     }
 }
 
 #if UNITY_EDITOR
-[CustomPropertyDrawer(typeof(ReadOnly))]
-public class ReadOnlyDrawer : PropertyDrawer
+[CustomPropertyDrawer(typeof(ReadOnlyAttribute))]
+public class ReadOnlyAttributeDrawer : PropertyDrawer
 {
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         GUI.enabled = false;
-        EditorGUI.PropertyField(position, property);
+        EditorGUI.PropertyField(position, property, true);
     }
 }
 #endif

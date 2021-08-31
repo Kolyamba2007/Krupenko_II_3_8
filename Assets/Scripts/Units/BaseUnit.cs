@@ -13,25 +13,22 @@ namespace Ziggurat.Units
         public Vector3 Target { protected set; get; }
 
         #region Statuses
-        [Header("Статусы")]
-        [SerializeField, Tooltip("Неактивный")]
-        private bool _paused;
-        [SerializeField, Tooltip("Неуязвим")]
-        private bool _invincible;
-        [SerializeField, Tooltip("Выделяем")]
-        private bool _selectable;
-
-        public bool Paused { protected set => _paused = value; get => _paused; }
-        public bool Invincible { protected set => _invincible = value; get => _invincible; }
-        public bool Selectable { protected set => _selectable = value; get => _selectable; }
-        public bool Selected { protected set; get; }
+        [field: Header("Статусы")]
+        [field: SerializeField, RenameField("Paused"), Tooltip("Неактивный")]
+        public bool Paused { private set; get; }
+        [field: SerializeField, RenameField("Invincible"), Tooltip("Неуязвим")]
+        public bool Invincible { private set; get; }
+        [field: SerializeField, RenameField("Selectable"), Tooltip("Выделяем")]
+        public bool Selectable { private set; get; }
+        public bool Selected { private set; get; }
         #endregion
 
         #region Characteristics
-        [Header("Характеристики")]
-        [SerializeField, Tooltip("Здоровье юнита")]
-        private ushort _health;
-        public ushort Health => _health;
+        [field: Header("Характеристики")]
+        [field: SerializeField, RenameField("Health"), Tooltip("Здоровье юнита")]
+        public ushort Health { private set; get; }
+        [field: SerializeField, RenameField("Owner"), Tooltip("Владелец юнита")]
+        public Owner Owner { protected set; get; }
         #endregion
 
         #region Events
@@ -51,13 +48,14 @@ namespace Ziggurat.Units
         {
             if (Invincible) return false;
 
-            if (Health - value > 0) _health -= value;
+            if (Health - value > 0) Health -= value;
             else
             {
-                _health = 0;
+                Health = 0;
                 died?.Invoke();
             }
             return true;
         }
+        public bool IsAllied(IUnit unit) => Owner == unit.Owner;
     }
 }

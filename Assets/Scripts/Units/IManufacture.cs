@@ -17,7 +17,7 @@
         /// </summary>
         float ProductionTime { get; }
 
-        IUnit ProduceUnit<T>() where T : IUnit;
+        BaseMelee ProduceUnit<T>() where T : BaseMelee;
         void Abort();
     }
 }
