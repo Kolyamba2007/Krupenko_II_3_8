@@ -1,4 +1,4 @@
-// GENERATED AUTOMATICALLY FROM 'Assets/Scripts/InputActions.inputactions'
+// GENERATED AUTOMATICALLY FROM 'Assets/Scripts/Input/InputActions.inputactions'
 
 using System;
 using System.Collections;
@@ -31,6 +31,14 @@ public class @NewInputSystem : IInputActionCollection, IDisposable
                     ""type"": ""Value"",
                     ""id"": ""e06c237f-926e-4d80-b59f-6b8f37140e7f"",
                     ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Lock"",
+                    ""type"": ""Button"",
+                    ""id"": ""4a082b2c-9b8c-48ac-9bb7-af23c8dde9cb"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
                 }
@@ -101,6 +109,17 @@ public class @NewInputSystem : IInputActionCollection, IDisposable
                     ""action"": ""Rotation"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""29ae7ca3-6877-4c86-b566-3b37fb424491"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Lock"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -111,6 +130,7 @@ public class @NewInputSystem : IInputActionCollection, IDisposable
         m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
         m_Camera_Moving = m_Camera.FindAction("Moving", throwIfNotFound: true);
         m_Camera_Rotation = m_Camera.FindAction("Rotation", throwIfNotFound: true);
+        m_Camera_Lock = m_Camera.FindAction("Lock", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -162,12 +182,14 @@ public class @NewInputSystem : IInputActionCollection, IDisposable
     private ICameraActions m_CameraActionsCallbackInterface;
     private readonly InputAction m_Camera_Moving;
     private readonly InputAction m_Camera_Rotation;
+    private readonly InputAction m_Camera_Lock;
     public struct CameraActions
     {
         private @NewInputSystem m_Wrapper;
         public CameraActions(@NewInputSystem wrapper) { m_Wrapper = wrapper; }
         public InputAction @Moving => m_Wrapper.m_Camera_Moving;
         public InputAction @Rotation => m_Wrapper.m_Camera_Rotation;
+        public InputAction @Lock => m_Wrapper.m_Camera_Lock;
         public InputActionMap Get() { return m_Wrapper.m_Camera; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -183,6 +205,9 @@ public class @NewInputSystem : IInputActionCollection, IDisposable
                 @Rotation.started -= m_Wrapper.m_CameraActionsCallbackInterface.OnRotation;
                 @Rotation.performed -= m_Wrapper.m_CameraActionsCallbackInterface.OnRotation;
                 @Rotation.canceled -= m_Wrapper.m_CameraActionsCallbackInterface.OnRotation;
+                @Lock.started -= m_Wrapper.m_CameraActionsCallbackInterface.OnLock;
+                @Lock.performed -= m_Wrapper.m_CameraActionsCallbackInterface.OnLock;
+                @Lock.canceled -= m_Wrapper.m_CameraActionsCallbackInterface.OnLock;
             }
             m_Wrapper.m_CameraActionsCallbackInterface = instance;
             if (instance != null)
@@ -193,6 +218,9 @@ public class @NewInputSystem : IInputActionCollection, IDisposable
                 @Rotation.started += instance.OnRotation;
                 @Rotation.performed += instance.OnRotation;
                 @Rotation.canceled += instance.OnRotation;
+                @Lock.started += instance.OnLock;
+                @Lock.performed += instance.OnLock;
+                @Lock.canceled += instance.OnLock;
             }
         }
     }
@@ -201,5 +229,6 @@ public class @NewInputSystem : IInputActionCollection, IDisposable
     {
         void OnMoving(InputAction.CallbackContext context);
         void OnRotation(InputAction.CallbackContext context);
+        void OnLock(InputAction.CallbackContext context);
     }
 }

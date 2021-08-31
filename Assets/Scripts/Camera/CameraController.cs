@@ -12,32 +12,48 @@ public class CameraController : MonoBehaviour
 
     private void Awake()
     {
-        Cursor.lockState = CursorLockMode.Locked;
         controls = new NewInputSystem();
     }
 
     private void OnEnable()
     {
         controls.Camera.Enable();
+        controls.Camera.Lock.started += Lock;
+        controls.Camera.Lock.canceled += Unlock;
     }
 
     private void OnDisable()
     {
+        controls.Camera.Lock.started -= Lock;
+        controls.Camera.Lock.canceled -= Unlock;
         controls.Camera.Disable();
+    }
+
+    void Lock(CallbackContext context)
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    void Unlock(CallbackContext context)
+    {
+        Cursor.lockState = CursorLockMode.Confined;
     }
 
     void Update()
     {
-        Vector2 delta = controls.Camera.Rotation.ReadValue<Vector2>();
-        if (delta!= Vector2.zero)
+        if (Cursor.lockState == CursorLockMode.Locked)
         {
-            transform.eulerAngles += new Vector3(-delta.y, delta.x, 0) * sensitivity * Time.deltaTime;
-        }
+            Vector2 delta = controls.Camera.Rotation.ReadValue<Vector2>();
+            if (delta != Vector2.zero)
+            {
+                transform.eulerAngles += new Vector3(-delta.y, delta.x, 0) * sensitivity * Time.deltaTime;
+            }
 
-        Vector2 value = controls.Camera.Moving.ReadValue<Vector2>();
-        if (value != Vector2.zero)
-        {
-            transform.Translate(new Vector3(value.x, 0, value.y) * Time.deltaTime * speed, Space.Self);
+            Vector2 value = controls.Camera.Moving.ReadValue<Vector2>();
+            if (value != Vector2.zero)
+            {
+                transform.Translate(new Vector3(value.x, 0, value.y) * Time.deltaTime * speed, Space.Self);
+            }
         }
     }
 }
