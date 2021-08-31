@@ -32,7 +32,12 @@ namespace Ziggurat.Units
             }
         }
 
-        public bool MoveTo(Vector3 point)
+        public override void Idle()
+        {
+            base.Idle();
+            NavMeshAgent.isStopped = true;
+        }
+        public virtual bool MoveTo(Vector3 point)
         {
             if (!CanMove || Dead) return false;
 
@@ -41,9 +46,9 @@ namespace Ziggurat.Units
             UnitState.MoveTo(this);
             return true;
         }
-        public bool MoveTo(Transform target) => MoveTo(target.position);
-        public bool MoveTo(IUnit target) => MoveTo(target.Position);
-        public bool Seek(IUnit unit)
+        public virtual bool MoveTo(Transform target) => MoveTo(target.position);
+        public virtual bool MoveTo(IUnit target) => MoveTo(target.Position);
+        public virtual bool Seek(IUnit unit)
         {
             if (!CanMove || Dead) return false;
 
@@ -52,7 +57,7 @@ namespace Ziggurat.Units
             UnitState.Seek(this);
             return true;
         }
-        public bool Wander(float radius)
+        public virtual bool Wander(float radius)
         {
             if (!CanMove || Dead) return false;
 

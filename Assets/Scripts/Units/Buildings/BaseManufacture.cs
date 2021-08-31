@@ -8,16 +8,20 @@ namespace Ziggurat.Units
     public abstract class BaseManufacture : Building, IManufacture
     {
         [Header("Производство")]
+        [SerializeField, Tooltip("Точка создания юнита")]
+        private Transform _spawnPoint;
         [SerializeField, Min(0), Tooltip("Время производства")]
         private float _productionTime;
         [SerializeField]
-        protected ProgressBar ProgressBar;
+        private ProgressBar ProgressBar;  
 
         public bool IsManufacturing { private set; get; } = false;
         public float ProductionProgress => ProgressBar.Value;
         public float ProductionTime { private set => _productionTime = value; get => _productionTime; }
+        public Transform SpawnPoint => _spawnPoint;
+        public Vector3? PoolPoint { set; get; }
 
-        public event Action<BaseMelee> Manufactured;
+        public event Action<Type> Manufactured;
 
         public BaseMelee ProduceUnit<T>() where T : BaseMelee
         {
@@ -43,7 +47,7 @@ namespace Ziggurat.Units
             }
             ProgressBar.SetValue(0);
             IsManufacturing = false;
-            Manufactured?.Invoke(null);
+            Manufactured?.Invoke(typeof(T));
         }
         public void Abort()
         {

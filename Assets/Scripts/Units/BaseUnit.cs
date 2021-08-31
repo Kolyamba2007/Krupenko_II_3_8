@@ -4,7 +4,6 @@ using UnityEngine;
 namespace Ziggurat.Units
 {
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(Collider))]
     public abstract class BaseUnit : MonoBehaviour, IUnit
     {
         public abstract string Name { get; }
@@ -16,7 +15,7 @@ namespace Ziggurat.Units
         [field: Header("Статусы")]
         [field: SerializeField, RenameField("Paused"), Tooltip("Неактивный")]
         public bool Paused { private set; get; }
-        [field: SerializeField, RenameField("Invincible"), Tooltip("Неуязвим")]
+        [field: SerializeField, RenameField("Invulnerable"), Tooltip("Неуязвим")]
         public bool Invulnerable { private set; get; }
         [field: SerializeField, RenameField("Selectable"), Tooltip("Выделяем")]
         public bool Selectable { private set; get; }
@@ -25,7 +24,7 @@ namespace Ziggurat.Units
         #endregion
 
         #region Characteristics
-        public IUnitState UnitState { set; get; } = new UnitIdleState();
+        protected IUnitState UnitState { private set; get; } = new UnitIdleState();
 
         [field: Header("Характеристики")]
         [field: SerializeField, RenameField("Health"), Tooltip("Здоровье юнита")]
@@ -33,18 +32,8 @@ namespace Ziggurat.Units
         [field: SerializeField, RenameField("Max Health"), Tooltip("Максимальное здоровье юнита")]
         public ushort MaxHealth { private set; get; }
         [field: SerializeField, RenameField("Owner"), Tooltip("Владелец юнита")]
-        public Owner Owner { private set; get; }
-        public UnitState CurrentState
-        {
-            get
-            {
-                if (UnitState is UnitIdleState) return Ziggurat.UnitState.Idle;
-                if (UnitState is UnitMoveState) return Ziggurat.UnitState.Move;
-                if (UnitState is UnitSeekState) return Ziggurat.UnitState.Seek;
-                if (UnitState is UnitWanderState) return Ziggurat.UnitState.Wander;
-                throw new Exception();
-            }
-        }
+        public Owner Owner { private set; get; } = Owner.Neutral;
+        public UnitState CurrentState { private set; get; } = Ziggurat.UnitState.Idle;
         #endregion
 
         #region Events
@@ -52,13 +41,9 @@ namespace Ziggurat.Units
         public event Action selected;
         #endregion
 
-        protected Collider Collider { set; get; }  
-
         private void Awake()
         {
-            Collider = GetComponent<Collider>();
-
-            Health = MaxHealth;
+            Managers.GameManager.RegisterUnit(this);
         }
 
         public bool SetDamage(byte value) => SetDamage((ushort)value);
@@ -75,10 +60,18 @@ namespace Ziggurat.Units
             return true;
         }
         public bool IsAllied(IUnit unit) => Owner == unit.Owner;
-        public void Idle()
+        public virtual void Idle()
         {
             UnitState.Idle(this);
             Target = null;
+        }
+        public void SetState(IUnitState state)
+        {
+            UnitState = state;
+            if (UnitState is UnitIdleState) CurrentState = Ziggurat.UnitState.Idle;
+            if (UnitState is UnitMoveState) CurrentState = Ziggurat.UnitState.Move;
+            if (UnitState is UnitSeekState) CurrentState = Ziggurat.UnitState.Seek;
+            if (UnitState is UnitWanderState) CurrentState = Ziggurat.UnitState.Wander;
         }
     }
 }

@@ -17,24 +17,24 @@
 
         public void MoveTo(BaseUnit unit)
         {
-            unit.UnitState = new UnitMoveState();
+            unit.SetState(new UnitMoveState());
         }
 
         public void Seek(BaseUnit unit)
         {
-            unit.UnitState = new UnitSeekState();
+            unit.SetState(new UnitSeekState());
         }
 
         public void Wander(BaseUnit unit)
         {
-            unit.UnitState = new UnitWanderState();
+            unit.SetState(new UnitWanderState());
         }
     }
     class UnitMoveState : IUnitState
     {
         public void Idle(BaseUnit unit)
         {
-            unit.UnitState = new UnitIdleState();
+            unit.SetState(new UnitIdleState());
         }
 
         public void MoveTo(BaseUnit unit)
@@ -44,24 +44,24 @@
 
         public void Seek(BaseUnit unit)
         {
-            unit.UnitState = new UnitSeekState();
+            unit.SetState(new UnitSeekState());
         }
 
         public void Wander(BaseUnit unit)
         {
-            unit.UnitState = new UnitWanderState();
+            unit.SetState(new UnitWanderState());
         }
     }
     class UnitSeekState : IUnitState
     {
         public void Idle(BaseUnit unit)
         {
-            unit.UnitState = new UnitIdleState();
+            unit.SetState(new UnitIdleState());
         }
 
         public void MoveTo(BaseUnit unit)
         {
-            unit.UnitState = new UnitMoveState();
+            unit.SetState(new UnitMoveState());
         }
 
         public void Seek(BaseUnit unit)
@@ -71,24 +71,24 @@
 
         public void Wander(BaseUnit unit)
         {
-            unit.UnitState = new UnitWanderState();
+            unit.SetState(new UnitWanderState());
         }
     }
     class UnitWanderState : IUnitState
     {
         public void Idle(BaseUnit unit)
         {
-            unit.UnitState = new UnitIdleState();
+            unit.SetState(new UnitIdleState());
         }
 
         public void MoveTo(BaseUnit unit)
         {
-            unit.UnitState = new UnitMoveState();
+            unit.SetState(new UnitMoveState());
         }
 
         public void Seek(BaseUnit unit)
         {
-            unit.UnitState = new UnitSeekState();
+            unit.SetState(new UnitSeekState());
         }
 
         public void Wander(BaseUnit unit)
