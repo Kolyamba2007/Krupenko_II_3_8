@@ -33,6 +33,10 @@ namespace Ziggurat.Units
         /// </summary>
         ushort Health { get; }
         /// <summary>
+        /// Максимальное здоровье юнита
+        /// </summary>
+        ushort MaxHealth { get; }
+        /// <summary>
         /// Владелец юнита
         /// </summary>
         Owner Owner { get; }

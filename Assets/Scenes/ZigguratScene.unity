@@ -2721,6 +2721,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1010354911}
   - component: {fileID: 1010354913}
+  - component: {fileID: 1010354912}
   m_Layer: 0
   m_Name: Gate_Red
   m_TagString: Untagged
@@ -2744,6 +2745,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1010354912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1010354910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92aecd52b2cf3504a892b2e5bb96b900, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Paused>k__BackingField: 0
+  <Invincible>k__BackingField: 1
+  <Selectable>k__BackingField: 1
+  <Health>k__BackingField: 0
+  <MaxHealth>k__BackingField: 0
+  <Owner>k__BackingField: 0
+  _productionTime: 5
 --- !u!65 &1010354913
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4295,6 +4315,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1617742198}
   - component: {fileID: 1617742200}
+  - component: {fileID: 1617742199}
   m_Layer: 0
   m_Name: Gate_Blue
   m_TagString: Untagged
@@ -4318,6 +4339,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+--- !u!114 &1617742199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1617742197}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92aecd52b2cf3504a892b2e5bb96b900, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Paused>k__BackingField: 0
+  <Invincible>k__BackingField: 1
+  <Selectable>k__BackingField: 1
+  <Health>k__BackingField: 0
+  <MaxHealth>k__BackingField: 0
+  <Owner>k__BackingField: 0
+  _productionTime: 0
 --- !u!65 &1617742200
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5045,9 +5085,6 @@ GameObject:
   - component: {fileID: 1893807192}
   - component: {fileID: 1893807191}
   - component: {fileID: 1893807190}
-  - component: {fileID: 1893807195}
-  - component: {fileID: 1893807194}
-  - component: {fileID: 1893807193}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -5122,55 +5159,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1893807193
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1893807189}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92aecd52b2cf3504a892b2e5bb96b900, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _paused: 0
-  _invincible: 0
-  _selectable: 0
-  _health: 0
-  _productionTime: 0
---- !u!95 &1893807194
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1893807189}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
---- !u!65 &1893807195
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1893807189}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1910764183
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5562,6 +5550,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2096191718}
   - component: {fileID: 2096191720}
+  - component: {fileID: 2096191719}
   m_Layer: 0
   m_Name: Gate_Green
   m_TagString: Untagged
@@ -5585,6 +5574,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!114 &2096191719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2096191717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92aecd52b2cf3504a892b2e5bb96b900, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Paused>k__BackingField: 0
+  <Invincible>k__BackingField: 1
+  <Selectable>k__BackingField: 1
+  <Health>k__BackingField: 0
+  <MaxHealth>k__BackingField: 0
+  <Owner>k__BackingField: 0
+  _productionTime: 0
 --- !u!65 &2096191720
 BoxCollider:
   m_ObjectHideFlags: 0
