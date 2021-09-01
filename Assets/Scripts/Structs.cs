@@ -120,7 +120,7 @@ namespace Ziggurat
             get
             {
                 if (_transform != null) return _transform.position;
-                if (_position != null) return _position;
+                if (_position != Vector3.zero) return _position;
                 return Target.Position;
             }
         }

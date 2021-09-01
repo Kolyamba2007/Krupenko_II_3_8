@@ -23,6 +23,12 @@ namespace Ziggurat.Units
 
         public event Action<Type> Manufactured;
 
+        protected override void Disable()
+        {
+            base.Disable();
+            if (IsManufacturing) Abort();
+        }
+
         public BaseMelee ProduceUnit<T>() where T : BaseMelee
         {
             if (!IsManufacturing && ProductionTime > 0)

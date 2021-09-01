@@ -6,7 +6,6 @@ using UnityEditor;
 [CustomPropertyDrawer(typeof(RenameFieldAttribute))]
 public class RenameFieldAttributeDrawer : PropertyDrawer
 {
-    public string Name { get; }
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         bool isArray = property.isArray;

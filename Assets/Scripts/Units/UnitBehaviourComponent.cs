@@ -1,6 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Collections.Generic;
-using System;
+using UnityEngine.AI;
 
 namespace Ziggurat.Units
 {
@@ -18,7 +19,25 @@ namespace Ziggurat.Units
 
         public void Idle()
         {
-            CurrentState.Idle(Unit);
+            CurrentState.Idle();
+        }
+        public void Die()
+        {
+            CurrentState.Die();
+        }
+        public void Move(NavMeshAgent agent)
+        {
+            if (!Unit.Target.HasValue) return;
+
+            float remainingDistance = (agent.destination - Unit.Position).sqrMagnitude;
+            float stoppingDistance = agent.stoppingDistance * agent.stoppingDistance;
+            if (remainingDistance <= stoppingDistance)
+            {
+                Unit.Idle();
+                Idle();
+                return;
+            }
+            agent.SetDestination(Unit.Target.Value.Position);
         }
 
         public void AddState<T>() where T : BaseState

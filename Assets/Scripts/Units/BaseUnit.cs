@@ -9,7 +9,7 @@ namespace Ziggurat.Units
         public abstract string Name { get; }
         public Vector3 Position => transform.position;
         public abstract UnitType UnitType { get; }
-        public Vector3? Target { protected set; get; }
+        public TargetPoint? Target { protected set; get; }
 
         #region Statuses
         [field: Header("Статусы")]
@@ -33,7 +33,11 @@ namespace Ziggurat.Units
         public ushort MaxHealth { private set; get; }
         [field: SerializeField, RenameField("Owner"), Tooltip("Владелец юнита")]
         public Owner Owner { private set; get; } = Owner.Neutral;
-        public BaseState CurrentState => BehaviourComponent.CurrentState;
+
+        [field: Header("Поведение")]
+        [field: SerializeField, RenameField("Behaviour"), Tooltip("Состояние юнита")]
+        public UnitState Behaviour { set; get; }
+        protected BaseState CurrentState => BehaviourComponent.CurrentState;
         #endregion
 
         #region Events
@@ -41,12 +45,19 @@ namespace Ziggurat.Units
         public event Action selected;
         #endregion
 
+
         protected virtual void Awake()
         {
             BehaviourComponent = new UnitBehaviourComponent(this);
             BehaviourComponent.AddState<UnitIdleState>();
+            Behaviour = UnitState.Idle;
 
             Managers.GameManager.RegisterUnit(this);
+        }
+        protected virtual void Disable()
+        {
+            Selectable = false;
+            Selected = false;
         }
 
         public bool SetDamage(byte value) => SetDamage((ushort)value);
@@ -58,6 +69,8 @@ namespace Ziggurat.Units
             else
             {
                 Health = 0;
+                Disable();
+                BehaviourComponent.Die();
                 died?.Invoke();
             }
             return true;
@@ -66,7 +79,6 @@ namespace Ziggurat.Units
         public virtual void Idle()
         {
             Target = null;
-            BehaviourComponent.Idle();
-        }
+        }       
     }
 }

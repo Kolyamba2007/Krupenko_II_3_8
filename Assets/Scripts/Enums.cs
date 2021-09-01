@@ -49,6 +49,7 @@ namespace Ziggurat
         Seek = 2,
         Attack = 3,
         Wander = 4,
+        Die = 5,
     }
 
     /// <summary>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Ziggurat.Units;
 
@@ -9,7 +10,7 @@ namespace Ziggurat.Managers
     public class GameManager : MonoBehaviour
     {
         private static GameManager Instance => FindObjectOfType<GameManager>(); // Лучше так не делать, но пока сойдёт
-        private LinkedList<BaseUnit> Units = new LinkedList<BaseUnit>();
+        private static LinkedList<BaseUnit> Units = new LinkedList<BaseUnit>();
 
         [SerializeField]
         private ResourcesManager _resourcesManager;
@@ -51,26 +52,6 @@ namespace Ziggurat.Managers
         {
             Units.Remove(unit);
         }
-        private BaseUnit FindNearestEnemy(BaseUnit unit)
-        {
-            if (Units.Count == 0) return null;
-
-            BaseUnit enemy = null;
-            float minDist = float.MaxValue;
-
-            foreach (BaseUnit target in Units)
-            {
-                if (target == unit || target.IsAllied(unit)) continue;
-
-                float dist = Vector3.Distance(unit.Position, target.Position);
-                if (dist < minDist)
-                {
-                    minDist = dist;
-                    enemy = target;
-                }
-            }
-            return enemy;
-        }
         private BaseUnit CreateUnit(Type type, Vector3 position, Owner owner = Owner.Neutral)
         {
             GameObject unit = null;
@@ -103,7 +84,12 @@ namespace Ziggurat.Managers
         #region Unit Events
         private void OnUnitManufactured(BaseUnit unit, Vector3? poolPoint)
         {
-            if (unit is BaseMelee melee && poolPoint.HasValue) melee.MoveTo(poolPoint.Value);
+            if (unit is BaseMelee melee)
+            {
+                var nearestEnemy = melee.FindNearestEnemy();
+                if (nearestEnemy != null) melee.MoveTo(nearestEnemy);
+                else melee.MoveTo(poolPoint.Value);
+            }
         }
         private void OnUnitDied(BaseUnit unit)
         {
@@ -119,9 +105,10 @@ namespace Ziggurat.Managers
 
         public static void RegisterUnit(BaseUnit unit)
         {
-            if (Instance.Units.Contains(unit)) return;
+            if (Units.Contains(unit)) return;
             unit.died += () => Instance.UnitDied?.Invoke(unit);
-            Instance.Units.AddLast(unit);
+            Units.AddLast(unit);
         }
+        public static IReadOnlyList<BaseUnit> GetUnits() => Units.ToList();
     }
 }

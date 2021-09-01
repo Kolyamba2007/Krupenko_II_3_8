@@ -2,8 +2,10 @@
 using System.Collections;
 using System.Xml.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using RotaryHeart.Lib.SerializableDictionary;
+using Ziggurat.Managers;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -234,23 +236,32 @@ namespace Ziggurat.AI
     }
 
     public delegate void ActionEventHandler(ActionType newType, bool isLoop);
-
+}
+namespace Ziggurat.Units
+{ 
     public static partial class Extensions
     {
-        public static Interval<float> Pow(this Interval<float> interval, float value = 2)
+        public static BaseUnit FindNearestEnemy(this BaseUnit unit)
         {
-            return new Interval<float>(Mathf.Pow(interval.Min, value), Mathf.Pow(interval.Max, value));
-        }
-        public static Interval<int> Pow(this Interval<int> interval, float value = 2)
-        {
-            return new Interval<int>(Mathf.RoundToInt(Mathf.Pow(interval.Min, value)), Mathf.RoundToInt(Mathf.Pow(interval.Max, value)));
-        }
+            var units = GameManager.GetUnits();
+            if (units.Count == 0) return null;
+            units.ToList().Remove(unit);
 
-        /// <summary>
-        /// Конвертирует двумерный вектор в трехмернй вектор
-        /// </summary>
-        /// <param name="vector">Двумерный вектор</param>
-        /// <returns>Трехмерный вектор</returns>
-        public static Vector3 ConvertToMoveVector3(this Vector2 vector) => new Vector3(vector.x, 0f, vector.y);
+            BaseUnit enemy = null;
+            float minDist = float.MaxValue;
+
+            foreach (var target in units)
+            {
+                if (target.IsAllied(unit) || target.Invulnerable) continue;
+
+                float dist = Vector3.Distance(unit.Position, target.Position);
+                if (dist < minDist)
+                {
+                    minDist = dist;
+                    enemy = target;
+                }
+            }
+            return enemy;
+        }
     }
 }
