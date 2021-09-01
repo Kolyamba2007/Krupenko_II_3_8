@@ -8,8 +8,8 @@ namespace Ziggurat.Managers
 {
     public class GameManager : MonoBehaviour
     {
-        private static GameManager Instance => FindObjectOfType<GameManager>();
-        private LinkedList<IUnit> Units = new LinkedList<IUnit>();
+        private static GameManager Instance => FindObjectOfType<GameManager>(); // Лучше так не делать, но пока сойдёт
+        private LinkedList<BaseUnit> Units = new LinkedList<BaseUnit>();
 
         [SerializeField]
         private ResourcesManager _resourcesManager;
@@ -18,8 +18,8 @@ namespace Ziggurat.Managers
         [SerializeField]
         private Transform _poolPoint;
 
-        public event Action<IUnit> UnitCreated;
-        public event Action<IUnit> UnitDied;
+        public event Action<BaseUnit> UnitCreated;
+        public event Action<BaseUnit> UnitDied;
 
         private void Awake()
         {
@@ -43,22 +43,22 @@ namespace Ziggurat.Managers
             }
         }
 
-        private void AddUnit(IUnit unit)
+        private void AddUnit(BaseUnit unit)
         {
             if (Units.Contains(unit)) Units.AddLast(unit);
         }
-        private void RemoveUnit(IUnit unit)
+        private void RemoveUnit(BaseUnit unit)
         {
             Units.Remove(unit);
         }
-        private IUnit FindNearestEnemy(IUnit unit)
+        private BaseUnit FindNearestEnemy(BaseUnit unit)
         {
             if (Units.Count == 0) return null;
 
-            IUnit enemy = null;
+            BaseUnit enemy = null;
             float minDist = float.MaxValue;
 
-            foreach (IUnit target in Units)
+            foreach (BaseUnit target in Units)
             {
                 if (target == unit || target.IsAllied(unit)) continue;
 
@@ -101,14 +101,14 @@ namespace Ziggurat.Managers
         }
 
         #region Unit Events
-        private void OnUnitManufactured(IUnit unit, Vector3? poolPoint)
+        private void OnUnitManufactured(BaseUnit unit, Vector3? poolPoint)
         {
             if (unit is BaseMelee melee && poolPoint.HasValue) melee.MoveTo(poolPoint.Value);
         }
-        private void OnUnitDied(IUnit unit)
+        private void OnUnitDied(BaseUnit unit)
         {
             RemoveUnit(unit);
-            StartCoroutine(DeathCoroutine(unit as BaseUnit));
+            StartCoroutine(DeathCoroutine(unit));
         }
         private IEnumerator DeathCoroutine(BaseUnit unit)
         {
@@ -117,10 +117,10 @@ namespace Ziggurat.Managers
         }
         #endregion
 
-        public static void RegisterUnit(IUnit unit)
+        public static void RegisterUnit(BaseUnit unit)
         {
             if (Instance.Units.Contains(unit)) return;
-            unit.died += () => Instance.UnitDied?.Invoke(unit as BaseUnit);
+            unit.died += () => Instance.UnitDied?.Invoke(unit);
             Instance.Units.AddLast(unit);
         }
     }

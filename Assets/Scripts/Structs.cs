@@ -58,11 +58,11 @@ namespace Ziggurat
     public readonly struct ActionResultInfo
     {
         public readonly ActionType Type;
-        public readonly IUnit Source;
-        public readonly IUnit Target;
+        public readonly BaseUnit Source;
+        public readonly BaseUnit Target;
         public readonly ActionResultType Result;
 
-        public ActionResultInfo(ActionType type, IUnit source, IUnit target, ActionResultType result)
+        public ActionResultInfo(ActionType type, BaseUnit source, BaseUnit target, ActionResultType result)
         {
             Type = type; Source = source; Target = target; Result = result;
         }
@@ -114,7 +114,7 @@ namespace Ziggurat
         private readonly Transform _transform;
         private readonly Vector3 _position;
 
-        public readonly IUnit Target;
+        public readonly BaseUnit Target;
         public Vector3 Position
         {
             get
@@ -125,7 +125,7 @@ namespace Ziggurat
             }
         }
 
-        public TargetPoint(IUnit unit)
+        public TargetPoint(BaseUnit unit)
         {
             Target = unit;
             _position = Vector3.zero;

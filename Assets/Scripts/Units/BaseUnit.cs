@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Ziggurat.Units
 {
     [DisallowMultipleComponent]
-    public abstract class BaseUnit : MonoBehaviour, IUnit
+    public abstract class BaseUnit : MonoBehaviour
     {
         public abstract string Name { get; }
         public Vector3 Position => transform.position;
@@ -24,7 +24,7 @@ namespace Ziggurat.Units
         #endregion
 
         #region Characteristics
-        protected IUnitState UnitState { private set; get; } = new UnitIdleState();
+        protected UnitBehaviourComponent BehaviourComponent { private set; get; }
 
         [field: Header("Характеристики")]
         [field: SerializeField, RenameField("Health"), Tooltip("Здоровье юнита")]
@@ -33,7 +33,7 @@ namespace Ziggurat.Units
         public ushort MaxHealth { private set; get; }
         [field: SerializeField, RenameField("Owner"), Tooltip("Владелец юнита")]
         public Owner Owner { private set; get; } = Owner.Neutral;
-        public UnitState CurrentState { private set; get; } = Ziggurat.UnitState.Idle;
+        public BaseState CurrentState => BehaviourComponent.CurrentState;
         #endregion
 
         #region Events
@@ -41,8 +41,11 @@ namespace Ziggurat.Units
         public event Action selected;
         #endregion
 
-        private void Awake()
+        protected virtual void Awake()
         {
+            BehaviourComponent = new UnitBehaviourComponent(this);
+            BehaviourComponent.AddState<UnitIdleState>();
+
             Managers.GameManager.RegisterUnit(this);
         }
 
@@ -59,19 +62,11 @@ namespace Ziggurat.Units
             }
             return true;
         }
-        public bool IsAllied(IUnit unit) => Owner == unit.Owner;
+        public bool IsAllied(BaseUnit unit) => Owner == unit.Owner;
         public virtual void Idle()
         {
-            UnitState.Idle(this);
             Target = null;
-        }
-        public void SetState(IUnitState state)
-        {
-            UnitState = state;
-            if (UnitState is UnitIdleState) CurrentState = Ziggurat.UnitState.Idle;
-            if (UnitState is UnitMoveState) CurrentState = Ziggurat.UnitState.Move;
-            if (UnitState is UnitSeekState) CurrentState = Ziggurat.UnitState.Seek;
-            if (UnitState is UnitWanderState) CurrentState = Ziggurat.UnitState.Wander;
+            BehaviourComponent.Idle();
         }
     }
 }

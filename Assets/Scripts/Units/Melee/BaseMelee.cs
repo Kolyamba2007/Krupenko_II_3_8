@@ -18,24 +18,38 @@ namespace Ziggurat.Units
         private Rigidbody Rigidbody { set; get; }
         private NavMeshAgent NavMeshAgent { set; get; }
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             Animator = GetComponent<Animator>();
             Rigidbody = GetComponent<Rigidbody>();
             NavMeshAgent = GetComponent<NavMeshAgent>();
+
+            BehaviourComponent.AddState<UnitMoveState>();
+            BehaviourComponent.AddState<UnitSeekState>();
+            BehaviourComponent.AddState<UnitWanderState>();
         }
         private void Update()
-        {      
-            if (Target.HasValue)
+        {
+            if (!Target.HasValue) return;
+
+            float remainingDistance = (NavMeshAgent.destination - Position).sqrMagnitude;
+            float stoppingDistance = NavMeshAgent.stoppingDistance * NavMeshAgent.stoppingDistance;
+            if (remainingDistance <= stoppingDistance)
             {
-                NavMeshAgent.SetDestination(Target.Value);
+                Idle();
+                return;
             }
+
+            NavMeshAgent.SetDestination(Target.Value);            
         }
 
         public override void Idle()
         {
             base.Idle();
+            NavMeshAgent.destination = Position;
             NavMeshAgent.isStopped = true;
+            Animator.SetFloat("Movement", 0f);
         }
         public virtual bool MoveTo(Vector3 point)
         {
@@ -43,18 +57,20 @@ namespace Ziggurat.Units
 
             Target = new Vector3(point.x, Position.y, point.z);
             NavMeshAgent.destination = point;
-            UnitState.MoveTo(this);
+            NavMeshAgent.isStopped = false;
+            Animator.SetFloat("Movement", 1f);
+            BehaviourComponent.SwitchState<UnitMoveState>();
             return true;
         }
         public virtual bool MoveTo(Transform target) => MoveTo(target.position);
-        public virtual bool MoveTo(IUnit target) => MoveTo(target.Position);
-        public virtual bool Seek(IUnit unit)
+        public virtual bool MoveTo(BaseUnit target) => MoveTo(target.Position);
+        public virtual bool Seek(BaseUnit unit)
         {
             if (!CanMove || Dead) return false;
 
             Target = unit.Position;
             NavMeshAgent.destination = Target.Value;
-            UnitState.Seek(this);
+            BehaviourComponent.SwitchState<UnitSeekState>();
             return true;
         }
         public virtual bool Wander(float radius)
@@ -63,7 +79,7 @@ namespace Ziggurat.Units
 
             Target = Vector3.zero;
             NavMeshAgent.destination = Target.Value;
-            UnitState.Wander(this);
+            BehaviourComponent.SwitchState<UnitWanderState>();
             return true;
         }
     }

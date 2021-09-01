@@ -10,7 +10,7 @@ namespace Ziggurat.Units
         [Header("Производство")]
         [SerializeField, Tooltip("Точка создания юнита")]
         private Transform _spawnPoint;
-        [SerializeField, Min(0), Tooltip("Время производства")]
+        [SerializeField, Min(0), Tooltip("Время производства (в сек.)")]
         private float _productionTime;
         [SerializeField]
         private ProgressBar ProgressBar;  

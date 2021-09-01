@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.AI;
 
 namespace Ziggurat.Units
 {
@@ -10,6 +9,6 @@ namespace Ziggurat.Units
 
         bool MoveTo(Vector3 point);
         bool MoveTo(Transform target);
-        bool MoveTo(IUnit target);
+        bool MoveTo(BaseUnit target);
     }
 }
