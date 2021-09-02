@@ -40,6 +40,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8456266756083152448}
   - component: {fileID: 8456266756083152510}
+  - component: {fileID: -9088747061748774057}
   - component: {fileID: 852649134204459658}
   m_Layer: 0
   m_Name: Ziggurat
@@ -78,6 +79,21 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 30, y: 30, z: 30}
   m_Center: {x: 0, y: 12.45, z: 0}
+--- !u!114 &-9088747061748774057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8456266756083152449}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7676644cf04f24b45a564f87ab8bbdc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _renderer: {fileID: 8456266756349227876}
+  <Selectable>k__BackingField: 1
+  _outlineWidth: 0.5
 --- !u!114 &852649134204459658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,10 +108,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Paused>k__BackingField: 0
   <Invulnerable>k__BackingField: 1
-  <Selectable>k__BackingField: 1
   <Health>k__BackingField: 10
   <MaxHealth>k__BackingField: 10
   <Owner>k__BackingField: 0
+  <Behaviour>k__BackingField: 0
   _spawnPoint: {fileID: 6565227274417182671}
   _productionTime: 2
   ProgressBar:
@@ -186,6 +202,12 @@ PrefabInstance:
 --- !u!4 &8456266756347326852 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 257983b39ec65a248a27b31a6ed263bf,
+    type: 3}
+  m_PrefabInstance: {fileID: 8456266756346931972}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &8456266756349227876 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2300000, guid: 257983b39ec65a248a27b31a6ed263bf,
     type: 3}
   m_PrefabInstance: {fileID: 8456266756346931972}
   m_PrefabAsset: {fileID: 0}
