@@ -30,7 +30,7 @@ namespace Ziggurat.Units
         /// </summary>
         /// <typeparam name="T">Тип юнита</typeparam>
         /// <returns></returns>
-        BaseMelee ProduceUnit<T>() where T : BaseMelee;
+        void ProduceUnit<T>() where T : BaseMelee;
 
         /// <summary>
         /// Прерывает текущее производство юнита

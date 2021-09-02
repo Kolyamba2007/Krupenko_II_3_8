@@ -18,18 +18,6 @@ namespace Ziggurat.Units
         private Rigidbody Rigidbody { set; get; }
         private NavMeshAgent NavMeshAgent { set; get; }
 
-        private void Update()
-        {
-            var component = BehaviourComponent as MeleeBehaviour;
-            switch (Behaviour)
-            {
-                case UnitState.Move:
-                    component.Move(NavMeshAgent);
-                    break;
-                case UnitState.Attack: 
-                    break;                    
-            }           
-        }
         protected override void Awake()
         {
             base.Awake();
@@ -38,6 +26,21 @@ namespace Ziggurat.Units
             NavMeshAgent = GetComponent<NavMeshAgent>();
 
             BehaviourComponent = new MeleeBehaviour(this);
+        }
+        protected virtual void Update()
+        {
+            if (CurrentState is UnitIdleState) return;
+
+            var component = BehaviourComponent as MeleeBehaviour;
+            switch (Behaviour)
+            {
+                case UnitState.Move:
+                    component.Move(NavMeshAgent);
+                    break;
+                case UnitState.Seek:
+                    component.Seek(NavMeshAgent);
+                    break;                    
+            }           
         }
         protected override void Disable()
         {
@@ -63,8 +66,22 @@ namespace Ziggurat.Units
             BehaviourComponent.SwitchState<UnitMoveState>();
             return true;
         }
-        public virtual bool MoveTo(Transform target) => MoveTo(target.position);
-        public virtual bool MoveTo(BaseUnit target) => MoveTo(target.Position);
+        public virtual bool MoveTo(Transform target)
+        {
+            if (!CanMove || Dead) return false;
+
+            Target = new TargetPoint(target);
+            NavMeshAgent.isStopped = false;
+            Animator.SetFloat("Movement", 1f);
+            BehaviourComponent.SwitchState<UnitSeekState>();
+            return true;
+        }
+        public virtual bool MoveTo(BaseUnit target)
+        {
+            if (!CanMove || Dead || target.Dead) return false;
+
+            return MoveTo(target.transform);
+        }
         public virtual bool Seek(BaseUnit unit)
         {
             if (!CanMove || Dead) return false;

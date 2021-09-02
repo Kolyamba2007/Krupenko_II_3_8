@@ -70,10 +70,10 @@ namespace Ziggurat.Managers
             {
                 if (!unit.GetComponent(type)) unit.AddComponent(type);
                 component = (BaseUnit)unit.GetComponent(type);
-
-                unit.name = component.Name;
-
+                component.Owner = owner;
                 component.died += () => UnitDied?.Invoke(component);
+
+                unit.name = component.Name;              
 
                 AddUnit(component);
                 UnitCreated?.Invoke(component);
@@ -82,11 +82,35 @@ namespace Ziggurat.Managers
         }
 
         #region Unit Events
+        private BaseUnit FindNearestEnemy(BaseUnit unit, IEnumerable<BaseUnit> list)
+        {
+            if (list.Count() == 0) return null;
+            list.ToList().Remove(unit);
+
+            BaseUnit enemy = null;
+            float minDist = float.MaxValue;
+
+            foreach (var target in list)
+            {
+                if (target.IsAllied(unit) || target.Invulnerable) continue;
+
+                float dist = Vector3.Distance(unit.Position, target.Position);
+                if (dist < minDist)
+                {
+                    minDist = dist;
+                    enemy = target;
+                }
+            }
+            return enemy;
+        }
+
         private void OnUnitManufactured(BaseUnit unit, Vector3? poolPoint)
         {
             if (unit is BaseMelee melee)
             {
-                var nearestEnemy = melee.FindNearestEnemy();
+                var list = Units.Where(x => x is BaseMelee).ToList();
+                var nearestEnemy = FindNearestEnemy(unit, list);
+                Debug.Log($"Unit {unit.Name} tries to find {nearestEnemy}.");
                 if (nearestEnemy != null) melee.MoveTo(nearestEnemy);
                 else melee.MoveTo(poolPoint.Value);
             }

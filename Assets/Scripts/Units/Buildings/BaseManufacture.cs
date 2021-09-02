@@ -29,7 +29,7 @@ namespace Ziggurat.Units
             if (IsManufacturing) Abort();
         }
 
-        public BaseMelee ProduceUnit<T>() where T : BaseMelee
+        public void ProduceUnit<T>() where T : BaseMelee
         {
             if (!IsManufacturing && ProductionTime > 0)
             {
@@ -38,7 +38,6 @@ namespace Ziggurat.Units
                 ProgressBar.Label = typeof(T).Name;
                 StartCoroutine(ProduceCoroutine<T>());
             }
-            return null;
         }
         private IEnumerator ProduceCoroutine<T>() where T : BaseMelee
         {
