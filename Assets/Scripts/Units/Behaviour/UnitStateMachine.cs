@@ -2,8 +2,10 @@
 {
     public interface IStateSwitcher
     {
-        void AddState<T>() where T : BaseState;
+        BaseState CurrentState { get; }
         void SwitchState<T>() where T : BaseState;
+        void Idle();
+        void Die();
     }
 
     public abstract class BaseState
@@ -107,8 +109,7 @@
             StateSwitcher.SwitchState<UnitDeadState>();
         }
     }
-    class UnitWanderState 
-      : BaseState
+    class UnitWanderState : BaseState
     {
         public UnitWanderState(BaseUnit unit, IStateSwitcher stateSwitcher) : base(unit, stateSwitcher) { }
             

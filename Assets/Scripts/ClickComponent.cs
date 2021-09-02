@@ -1,60 +1,73 @@
-﻿using System.Linq;
+﻿using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Ziggurat.Units
+namespace Ziggurat.UI
 {
-    public class ClickComponent : MonoBehaviour, IPointerClickHandler
+    [RequireComponent(typeof(Collider))]
+    public sealed class ClickComponent : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
     {
         [SerializeField]
-        private Material material;
-        private MeshRenderer _mesh;
-        private Material[] _meshMaterials = new Material[3];
+        private Renderer _renderer;
+        private Material _defaultMaterial;
+        private Material _selectedMaterial;
 
-        private bool IsSelected = false;
+        [field: SerializeField, RenameField("Selectable")]
+        public bool Selectable { set; get; } = true;
+        public bool Selected { private set; get; }
+        [Space, SerializeField, Range(0, 2)]
+        private float _outlineWidth = 0.5f;
 
-        public delegate void ClickEventHandler(ClickComponent component);
+        public event Action selected;
 
-        public event ClickEventHandler OnClickEventHandler;
-
-        public void OnPointerClick(PointerEventData eventData)
+        private void Awake()
         {
-            if (!IsSelected)
+            try
             {
-                AddAdditionalMaterial(material);
-                IsSelected = true;
+                _defaultMaterial = _renderer.material;
+                _selectedMaterial = Resources.Load("Materials/Selected") as Material;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(name + " has error in ClickComponent!");
+                Debug.LogError(e);
+            }
+            finally
+            {
+                if (_selectedMaterial == null) Debug.LogWarning("Selected Material was not loaded!");
+            }
+        }
+            
+        public void Select(bool isSelected)
+        {
+            if (_renderer == null || !Selectable) return;
+
+            if (isSelected)
+            {
+                Color color = _renderer.material.color;
+                _renderer.material = _selectedMaterial;
+                _renderer.material.SetColor("_Color", color);
+                _renderer.material.SetFloat("_OutlineWidth", _outlineWidth);
             }
             else
             {
-                RemoveAdditionalMaterial();
-                IsSelected = false;
+                _renderer.material = _defaultMaterial;
             }
         }
 
-        public void AddAdditionalMaterial(Material material, int index = 1)
+        public void OnPointerClick(PointerEventData eventData)
         {
-            if (index < 1 || index > 2)
-            {
-                return;
-            }
-            _meshMaterials[index] = material;
-            _mesh.materials = _meshMaterials.Where(t => t != null).ToArray();
-        }
+            if (!Selectable) return;
 
-        public void RemoveAdditionalMaterial(int index = 1)
-        {
-            if (index < 1 || index > 2)
-            {
-                return;
-            }
-            _meshMaterials[index] = null;
-            _mesh.materials = _meshMaterials.Where(t => t != null).ToArray();
+            selected?.Invoke();
         }
-
-        protected virtual void Start()
+        public void OnPointerEnter(PointerEventData eventData)
         {
-            _mesh = GetComponent<MeshRenderer>();
-            _meshMaterials[0] = _mesh.material;
+            if (!Selected) Select(true);
+        }
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            if (Selected) Select(false);
         }
     }
 }

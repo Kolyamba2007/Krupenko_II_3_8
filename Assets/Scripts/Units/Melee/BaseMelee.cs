@@ -20,10 +20,11 @@ namespace Ziggurat.Units
 
         private void Update()
         {
+            var component = BehaviourComponent as MeleeBehaviour;
             switch (Behaviour)
             {
                 case UnitState.Move:
-                    BehaviourComponent.Move(NavMeshAgent);
+                    component.Move(NavMeshAgent);
                     break;
                 case UnitState.Attack: 
                     break;                    
@@ -36,9 +37,7 @@ namespace Ziggurat.Units
             Rigidbody = GetComponent<Rigidbody>();
             NavMeshAgent = GetComponent<NavMeshAgent>();
 
-            BehaviourComponent.AddState<UnitMoveState>();
-            BehaviourComponent.AddState<UnitSeekState>();
-            BehaviourComponent.AddState<UnitWanderState>();
+            BehaviourComponent = new MeleeBehaviour(this);
         }
         protected override void Disable()
         {

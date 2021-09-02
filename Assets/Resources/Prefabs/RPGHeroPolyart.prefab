@@ -2054,8 +2054,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4158096630655302}
   - component: {fileID: 95905397883882224}
+  - component: {fileID: -7636634281241672262}
   - component: {fileID: 7640316325777755045}
   - component: {fileID: 8987893223468832869}
+  - component: {fileID: 3767891796491426132}
   - component: {fileID: 2944719232520656399}
   m_Layer: 0
   m_Name: RPGHeroPolyart
@@ -2099,6 +2101,20 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!136 &-7636634281241672262
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1835885862194036}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2.44
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.87, z: 0}
 --- !u!54 &7640316325777755045
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2137,6 +2153,21 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &3767891796491426132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1835885862194036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7676644cf04f24b45a564f87ab8bbdc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _renderer: {fileID: 137211737089033600}
+  <Selectable>k__BackingField: 1
+  _outlineWidth: 0.2
 --- !u!114 &2944719232520656399
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2151,10 +2182,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Paused>k__BackingField: 0
   <Invulnerable>k__BackingField: 0
-  <Selectable>k__BackingField: 1
   <Health>k__BackingField: 10
   <MaxHealth>k__BackingField: 10
   <Owner>k__BackingField: 0
+  <Behaviour>k__BackingField: 0
 --- !u!1 &1907504620384056
 GameObject:
   m_ObjectHideFlags: 0

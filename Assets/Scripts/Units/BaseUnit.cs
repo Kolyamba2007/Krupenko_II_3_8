@@ -1,10 +1,12 @@
 ﻿using System;
 using UnityEngine;
+using Ziggurat.UI;
 
 namespace Ziggurat.Units
 {
     [DisallowMultipleComponent]
-    public abstract class BaseUnit : MonoBehaviour
+    [RequireComponent(typeof(ClickComponent))]
+    public abstract class BaseUnit : MonoBehaviour, ISelectable
     {
         public abstract string Name { get; }
         public Vector3 Position => transform.position;
@@ -17,14 +19,13 @@ namespace Ziggurat.Units
         public bool Paused { private set; get; }
         [field: SerializeField, RenameField("Invulnerable"), Tooltip("Неуязвим")]
         public bool Invulnerable { private set; get; }
-        [field: SerializeField, RenameField("Selectable"), Tooltip("Выделяем")]
-        public bool Selectable { private set; get; }
-        public bool Selected { private set; get; }
+        public bool Selectable { private set => ClickComponent.Selectable = value; get => ClickComponent.Selectable; }
+        public bool Selected => ClickComponent.Selected;
         public bool Dead => Health == 0;
         #endregion
 
         #region Characteristics
-        protected UnitBehaviourComponent BehaviourComponent { private set; get; }
+        private ClickComponent ClickComponent { set; get; }  
 
         [field: Header("Характеристики")]
         [field: SerializeField, RenameField("Health"), Tooltip("Здоровье юнита")]
@@ -33,11 +34,14 @@ namespace Ziggurat.Units
         public ushort MaxHealth { private set; get; }
         [field: SerializeField, RenameField("Owner"), Tooltip("Владелец юнита")]
         public Owner Owner { private set; get; } = Owner.Neutral;
+        #endregion
 
+        #region Behaviour
         [field: Header("Поведение")]
         [field: SerializeField, RenameField("Behaviour"), Tooltip("Состояние юнита")]
         public UnitState Behaviour { set; get; }
         protected BaseState CurrentState => BehaviourComponent.CurrentState;
+        protected IStateSwitcher BehaviourComponent { set; get; }
         #endregion
 
         #region Events
@@ -45,19 +49,19 @@ namespace Ziggurat.Units
         public event Action selected;
         #endregion
 
-
         protected virtual void Awake()
         {
-            BehaviourComponent = new UnitBehaviourComponent(this);
-            BehaviourComponent.AddState<UnitIdleState>();
-            Behaviour = UnitState.Idle;
+            BehaviourComponent = new BaseUnitBehaviour(this); 
+
+            ClickComponent = GetComponent<ClickComponent>();
+            ClickComponent.selected += selected;
 
             Managers.GameManager.RegisterUnit(this);
         }
         protected virtual void Disable()
         {
             Selectable = false;
-            Selected = false;
+            ClickComponent.Select(false);
         }
 
         public bool SetDamage(byte value) => SetDamage((ushort)value);
@@ -79,6 +83,6 @@ namespace Ziggurat.Units
         public virtual void Idle()
         {
             Target = null;
-        }       
+        }
     }
 }
