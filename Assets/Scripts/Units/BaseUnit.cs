@@ -33,7 +33,7 @@ namespace Ziggurat.Units
         [field: SerializeField, RenameField("Max Health"), Tooltip("Максимальное здоровье юнита")]
         public ushort MaxHealth { private set; get; }
         [field: SerializeField, RenameField("Owner"), Tooltip("Владелец юнита")]
-        public Owner Owner { private set; get; } = Owner.Neutral;
+        public Owner Owner { set; get; } = Owner.Neutral;
         #endregion
 
         #region Behaviour

@@ -42,6 +42,7 @@ namespace Ziggurat.UI
         {
             if (_renderer == null || !Selectable) return;
 
+            Selected = isSelected;
             if (isSelected)
             {
                 Color color = _renderer.material.color;
