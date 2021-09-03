@@ -2142,9 +2142,9 @@ NavMeshAgent:
   m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 10
-  m_Acceleration: 8
+  m_Acceleration: 20
   avoidancePriority: 50
-  m_AngularSpeed: 120
+  m_AngularSpeed: 200
   m_StoppingDistance: 1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -2182,10 +2182,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Paused>k__BackingField: 0
   <Invulnerable>k__BackingField: 0
+  <CanRegenerate>k__BackingField: 1
   <Health>k__BackingField: 10
   <MaxHealth>k__BackingField: 10
   <Owner>k__BackingField: 0
-  <Behaviour>k__BackingField: 0
 --- !u!1 &1907504620384056
 GameObject:
   m_ObjectHideFlags: 0

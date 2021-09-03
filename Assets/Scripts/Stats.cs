@@ -1,6 +1,7 @@
 ﻿using OneLine;
 using System;
 using UnityEngine;
+using Ziggurat.Configuration;
 
 namespace Ziggurat.Units
 {
@@ -26,7 +27,6 @@ namespace Ziggurat.Units
 
             var mobilityParams = a.MobilityParams;
             mobilityParams.MoveSpeed = Mathf.Clamp(mobilityParams.MoveSpeed + b.MobilityParams.MoveSpeed, 0f, 100f);
-            mobilityParams.JumpForce = Mathf.Clamp(mobilityParams.JumpForce + b.MobilityParams.JumpForce, 0f, 100f);
             sum.MobilityParams = mobilityParams;
 
             var battleParams = a.BattleParams;
@@ -51,17 +51,17 @@ namespace Ziggurat.Units
         /// Здоровье, сколько урона выдержит персонаж
         /// </summary>
         [Min(0), Tooltip("Здоровье, сколько урона выдержит персонаж")]
-        public float MaxHealth;
+        public ushort MaxHealth;
         /// <summary>
         /// Скорость восстановления здоровья в секунду
         /// </summary>
         [Min(0), Tooltip("Скорость восстановления здоровья в секунду")]
-        public float HPRegenPerSec;
+        public ushort HPRegenPerSec;
 
         public static BaseParamsData Empty => new BaseParamsData()
         {
-            MaxHealth = 10f,
-            HPRegenPerSec = 0f
+            MaxHealth = 10,
+            HPRegenPerSec = 0
         };
 
         public override bool Equals(object obj)
@@ -88,17 +88,11 @@ namespace Ziggurat.Units
         /// </summary>
         [Min(0), Tooltip("Скорость поворота")]
         public float RotateSpeed;
-        /// <summary>
-        /// Сила прыжка
-        /// </summary>
-        [Min(0), Tooltip("Сила прыжка")]
-        public float JumpForce;
 
         public static MobilityParamsData Empty => new MobilityParamsData()
         {
             MoveSpeed = 1f,
             RotateSpeed = 1f,
-            JumpForce = 5f
         };
 
         public override bool Equals(object obj)
@@ -108,7 +102,6 @@ namespace Ziggurat.Units
             var data = (MobilityParamsData)obj;
 
             return data.MoveSpeed == MoveSpeed &&
-                data.JumpForce == JumpForce &&
                 data.RotateSpeed == RotateSpeed;
         }
     }
@@ -123,12 +116,12 @@ namespace Ziggurat.Units
         /// Урон при быстрых атаках
         /// </summary>
         [Min(0), Tooltip("Урон при быстрых атаках")]
-        public float FastAttackDamage;
+        public ushort FastAttackDamage;
         /// <summary>
         /// Урон при сильных атаках
         /// </summary>
         [Min(0), Tooltip("Урон при сильных атаках")]
-        public float StrongAttackDamage;
+        public ushort StrongAttackDamage;
         /// <summary>
         /// Множитель критического урона
         /// </summary>
@@ -142,8 +135,8 @@ namespace Ziggurat.Units
 
         public static BattleParamsData Empty => new BattleParamsData()
         {
-            FastAttackDamage = 5f,
-            StrongAttackDamage = 10f,
+            FastAttackDamage = 5,
+            StrongAttackDamage = 10,
             CriticalMultiplier = 1f,
             AttackCooldown = 1.5f
         };

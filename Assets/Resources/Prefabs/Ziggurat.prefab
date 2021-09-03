@@ -108,10 +108,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Paused>k__BackingField: 0
   <Invulnerable>k__BackingField: 1
+  <CanRegenerate>k__BackingField: 1
   <Health>k__BackingField: 10
   <MaxHealth>k__BackingField: 10
   <Owner>k__BackingField: 0
-  <Behaviour>k__BackingField: 0
   _spawnPoint: {fileID: 6565227274417182671}
   _productionTime: 2
   ProgressBar:

@@ -76,45 +76,6 @@ namespace Ziggurat
     }
 
     /// <summary>
-    /// Паттерны поведения бота
-    /// </summary>
-    public enum AIPattern : byte
-    {
-        /// <summary>
-        /// Простой
-        /// </summary>
-        Simple = 0,
-        /// <summary>
-        /// Защищающийся
-        /// </summary>
-        Defender = 10,
-        /// <summary>
-        /// Контратакующий
-        /// </summary>
-        CounterDefender = 11,
-        /// <summary>
-        /// Быстро атакующий
-        /// </summary>
-        FastAttacker = 20,
-        /// <summary>
-        /// Сокрушающий
-        /// </summary>
-        StrongAttacker = 21,
-        /// <summary>
-        /// Дальний
-        /// </summary>
-        Further = 30,
-        /// <summary>
-        /// Поддерживающий
-        /// </summary>
-        Support = 40,
-        /// <summary>
-        /// Маг
-        /// </summary>
-        Mage = 50,
-    }
-
-    /// <summary>
     /// Типы юнитов
     /// </summary>
     public enum UnitType : byte
@@ -185,15 +146,6 @@ namespace Ziggurat
         /// Был нанесён критический удар
         /// </summary>
         Critical
-    }
-
-    [Flags]
-    public enum IgnoreAxisType : byte
-    {
-        None = 0,
-        X = 1,
-        Y = 2,
-        Z = 4
     }
 
     /// <summary>

@@ -4,42 +4,40 @@ namespace Ziggurat.Units
 {
     public class MeleeBehaviour : BaseUnitBehaviour
     {
-        public MeleeBehaviour(BaseUnit unit) : base(unit) 
+        private readonly NavMeshAgent NavMeshAgent;
+        public MeleeBehaviour(BaseUnit unit, NavMeshAgent agent) : base(unit) 
         {
+            NavMeshAgent = agent;
             AddState<UnitMoveState>();
             AddState<UnitSeekState>();
             AddState<UnitWanderState>();
         }
 
-        public void Move(NavMeshAgent agent)
+        public void Move()
         {
-            if (!Unit.Target.HasValue) return;
-
-            float remainingDistance = (agent.destination - Unit.Position).sqrMagnitude;
-            float stoppingDistance = agent.stoppingDistance * agent.stoppingDistance;
-            if (remainingDistance <= stoppingDistance)
-            {
-                Idle();
-                return;
-            }
-            agent.SetDestination(Unit.Target.Value.Position);
+            SwitchState<UnitMoveState>();
         }
-        public void Seek(NavMeshAgent agent)
+        public void Seek()
+        {
+            SwitchState<UnitSeekState>();
+        }
+        public void Wander()
+        {
+            SwitchState<UnitWanderState>();
+        }
+
+        public void Update()
         {
             if (!Unit.Target.HasValue) return;
 
             float remainingDistance = (Unit.Target.Value.Position - Unit.Position).sqrMagnitude;
-            float stoppingDistance = agent.stoppingDistance * agent.stoppingDistance;
+            float stoppingDistance = NavMeshAgent.stoppingDistance * NavMeshAgent.stoppingDistance;
             if (remainingDistance <= stoppingDistance)
             {
-                Idle();
+                if (CurrentState is UnitWanderState == false) Idle();
                 return;
             }
-            agent.SetDestination(Unit.Target.Value.Position);
-        }
-        public void Wander(NavMeshAgent agent)
-        {
-
+            NavMeshAgent.SetDestination(Unit.Target.Value.Position);
         }
     }
 }

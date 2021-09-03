@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Ziggurat.Units;
+using Ziggurat.Configuration;
 
 namespace Ziggurat.Managers
 {
@@ -13,6 +14,8 @@ namespace Ziggurat.Managers
         private static LinkedList<BaseUnit> Units = new LinkedList<BaseUnit>();
 
         [SerializeField]
+        private StatsConfiguration _statsConfig;
+        [Space, SerializeField]
         private ResourcesManager _resourcesManager;
         [SerializeField]
         private Transform _unitParent;
@@ -110,7 +113,6 @@ namespace Ziggurat.Managers
             {
                 var list = Units.Where(x => x is BaseMelee).ToList();
                 var nearestEnemy = FindNearestEnemy(unit, list);
-                Debug.Log($"Unit {unit.Name} tries to find {nearestEnemy}.");
                 if (nearestEnemy != null) melee.MoveTo(nearestEnemy);
                 else melee.MoveTo(poolPoint.Value);
             }
@@ -134,5 +136,6 @@ namespace Ziggurat.Managers
             Units.AddLast(unit);
         }
         public static IReadOnlyList<BaseUnit> GetUnits() => Units.ToList();
+        public static StatsData GetStats() => Instance._statsConfig.AllProperties;
     }
 }

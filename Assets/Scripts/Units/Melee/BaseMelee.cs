@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
+using Ziggurat.Managers;
 
 namespace Ziggurat.Units
 {
@@ -18,34 +19,41 @@ namespace Ziggurat.Units
         private Rigidbody Rigidbody { set; get; }
         private NavMeshAgent NavMeshAgent { set; get; }
 
+        private BattleParamsData BattleParams;
+
         protected override void Awake()
         {
             base.Awake();
             Animator = GetComponent<Animator>();
             Rigidbody = GetComponent<Rigidbody>();
             NavMeshAgent = GetComponent<NavMeshAgent>();
+            NavMeshAgent.speed = GameManager.GetStats().MobilityParams.MoveSpeed;
+            NavMeshAgent.angularSpeed = GameManager.GetStats().MobilityParams.RotateSpeed;
 
-            BehaviourComponent = new MeleeBehaviour(this);
+            MaxHealth = GameManager.GetStats().BaseParams.MaxHealth;
+            Health = MaxHealth;
+
+            BattleParams = GameManager.GetStats().BattleParams;
+
+            BehaviourComponent = new MeleeBehaviour(this, NavMeshAgent);
         }
-        protected virtual void Update()
+        protected override void Update()
         {
-            if (CurrentState is UnitIdleState) return;
+            base.Update();
 
-            var component = BehaviourComponent as MeleeBehaviour;
-            switch (Behaviour)
+            if (Behaviour == UnitState.Idle) return;
+            (BehaviourComponent as MeleeBehaviour).Update();
+
+            if (Behaviour == UnitState.Wander && NavMeshAgent.isStopped)
             {
-                case UnitState.Move:
-                    component.Move(NavMeshAgent);
-                    break;
-                case UnitState.Seek:
-                    component.Seek(NavMeshAgent);
-                    break;                    
-            }           
+                Target = new TargetPoint(Position + Random.insideUnitSphere * 5f);
+            }
         }
         protected override void Disable()
         {
             base.Disable();
             CanMove = false;
+            NavMeshAgent.isStopped = true;
         }
 
         public override void Idle()
@@ -63,7 +71,8 @@ namespace Ziggurat.Units
             NavMeshAgent.destination = point;
             NavMeshAgent.isStopped = false;
             Animator.SetFloat("Movement", 1f);
-            BehaviourComponent.SwitchState<UnitMoveState>();
+            Behaviour = UnitState.Move;
+            (BehaviourComponent as MeleeBehaviour).Move();
             return true;
         }
         public virtual bool MoveTo(Transform target)
@@ -73,7 +82,8 @@ namespace Ziggurat.Units
             Target = new TargetPoint(target);
             NavMeshAgent.isStopped = false;
             Animator.SetFloat("Movement", 1f);
-            BehaviourComponent.SwitchState<UnitSeekState>();
+            Behaviour = UnitState.Move;
+            (BehaviourComponent as MeleeBehaviour).Seek();
             return true;
         }
         public virtual bool MoveTo(BaseUnit target)
@@ -82,22 +92,14 @@ namespace Ziggurat.Units
 
             return MoveTo(target.transform);
         }
-        public virtual bool Seek(BaseUnit unit)
-        {
-            if (!CanMove || Dead) return false;
-
-            Target = new TargetPoint(unit);
-            NavMeshAgent.destination = Target.Value.Position;
-            BehaviourComponent.SwitchState<UnitSeekState>();
-            return true;
-        }
         public virtual bool Wander(float radius)
         {
             if (!CanMove || Dead) return false;
 
             Target = new TargetPoint();
             NavMeshAgent.destination = Target.Value.Position;
-            BehaviourComponent.SwitchState<UnitWanderState>();
+            Behaviour = UnitState.Wander;
+            (BehaviourComponent as MeleeBehaviour).Wander();
             return true;
         }
     }

@@ -7,7 +7,6 @@
         void Idle();
         void Die();
     }
-
     public abstract class BaseState
     {
         protected readonly BaseUnit Unit;
@@ -18,6 +17,7 @@
             Unit = unit;
             StateSwitcher = stateSwitcher;
         }
+
         public abstract void Start();
         public abstract void Stop();
         public abstract void Idle();
@@ -30,15 +30,15 @@
           
         public override void Start()
         {
-            Unit.Behaviour = UnitState.Idle;
+            Unit.Idle();
         }
         public override void Stop()
         {
-            
+
         }
         public override void Idle()
         {
-            return;
+            StateSwitcher.SwitchState<UnitIdleState>();
         }
         public override void Die()
         {
@@ -51,32 +51,11 @@
             
         public override void Start()
         {
-            Unit.Behaviour = UnitState.Die;
+           
         }
         public override void Stop()
         {
 
-        }
-        public override void Idle()
-        {
-            return;
-        }
-        public override void Die()
-        {
-            return;
-        }
-    }
-    class UnitMoveState : BaseState
-    {
-        public UnitMoveState(BaseUnit unit, IStateSwitcher stateSwitcher) : base(unit, stateSwitcher) { } 
- 
-        public override void Start()
-        {
-            Unit.Behaviour = UnitState.Move;
-        }
-        public override void Stop()
-        {
-            
         }
         public override void Idle()
         {
@@ -86,19 +65,81 @@
         {
             StateSwitcher.SwitchState<UnitDeadState>();
         }
-
     }
-    class UnitSeekState : BaseState
+
+    interface IMeleeState
+    {
+        void Move();
+        void Seek();
+        void Wander();
+        void Attack();
+    }
+    class UnitMoveState : BaseState, IMeleeState
+    {
+        public UnitMoveState(BaseUnit unit, IStateSwitcher stateSwitcher) : base(unit, stateSwitcher) { }
+
+        public override void Start()
+        {
+            
+        }
+        public override void Stop()
+        {
+            
+        }
+
+        public void Move()
+        {
+            return;
+        }
+        public void Seek()
+        {
+            StateSwitcher.SwitchState<UnitSeekState>();
+        }
+        public void Wander()
+        {
+            StateSwitcher.SwitchState<UnitWanderState>();
+        }
+        public void Attack()
+        {
+
+        }
+        public override void Idle()
+        {
+            StateSwitcher.SwitchState<UnitIdleState>();
+        }
+        public override void Die()
+        {
+            StateSwitcher.SwitchState<UnitDeadState>();
+        }
+    }
+    class UnitSeekState : BaseState, IMeleeState
     {
         public UnitSeekState(BaseUnit unit, IStateSwitcher stateSwitcher) : base(unit, stateSwitcher) { }
-           
+        
         public override void Start()
         {
-            Unit.Behaviour = UnitState.Seek;
+         
         }
         public override void Stop()
         {
            
+        }
+
+        public void Move()
+        {
+            StateSwitcher.SwitchState<UnitMoveState>();
+        }
+        public void Seek()
+        {
+            return;
+        }
+        public void Wander()
+        {
+            StateSwitcher.SwitchState<UnitWanderState>();
+        }
+        public void Attack()
+        {
+
         }
         public override void Idle()
         {
@@ -109,17 +150,34 @@
             StateSwitcher.SwitchState<UnitDeadState>();
         }
     }
-    class UnitWanderState : BaseState
+    class UnitWanderState : BaseState, IMeleeState
     {
         public UnitWanderState(BaseUnit unit, IStateSwitcher stateSwitcher) : base(unit, stateSwitcher) { }
-            
+
         public override void Start()
         {
-            Unit.Behaviour = UnitState.Wander;
+           
         }
         public override void Stop()
         {
          
+        }
+
+        public void Move()
+        {
+            StateSwitcher.SwitchState<UnitMoveState>();
+        }
+        public void Seek()
+        {
+            StateSwitcher.SwitchState<UnitSeekState>();
+        }
+        public void Wander()
+        {
+            return;
+        }
+        public void Attack()
+        {
+
         }
         public override void Idle()
         {

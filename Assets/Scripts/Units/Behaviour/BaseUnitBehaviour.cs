@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using UnityEngine.AI;
 
 namespace Ziggurat.Units
 {
@@ -16,12 +15,11 @@ namespace Ziggurat.Units
             Unit = unit;
             AddState<UnitIdleState>();
             AddState<UnitDeadState>();
-            SwitchState<UnitIdleState>();
+            CurrentState = new UnitIdleState(unit, this);
         }
 
         public void Idle()
-        {
-            Unit.Idle();
+        {           
             CurrentState.Idle();
         }
         public void Die()

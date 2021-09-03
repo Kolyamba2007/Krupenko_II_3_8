@@ -19,6 +19,8 @@ namespace Ziggurat.Units
         public bool Paused { private set; get; }
         [field: SerializeField, RenameField("Invulnerable"), Tooltip("Неуязвим")]
         public bool Invulnerable { private set; get; }
+        [field: SerializeField, RenameField("Can Regenerate"), Tooltip("Может восстанавливаться")]
+        public bool CanRegenerate { private set; get; }
         public bool Selectable { private set => ClickComponent.Selectable = value; get => ClickComponent.Selectable; }
         public bool Selected => ClickComponent.Selected;
         public bool Dead => Health == 0;
@@ -29,17 +31,17 @@ namespace Ziggurat.Units
 
         [field: Header("Характеристики")]
         [field: SerializeField, RenameField("Health"), Tooltip("Здоровье юнита")]
-        public ushort Health { private set; get; }
+        public ushort Health { protected set; get; }
         [field: SerializeField, RenameField("Max Health"), Tooltip("Максимальное здоровье юнита")]
-        public ushort MaxHealth { private set; get; }
+        public ushort MaxHealth { protected set; get; }
         [field: SerializeField, RenameField("Owner"), Tooltip("Владелец юнита")]
         public Owner Owner { set; get; } = Owner.Neutral;
+
+        private float _hpPerSec = 1f;
         #endregion
 
         #region Behaviour
-        [field: Header("Поведение")]
-        [field: SerializeField, RenameField("Behaviour"), Tooltip("Состояние юнита")]
-        public UnitState Behaviour { set; get; }
+        public UnitState Behaviour { protected set; get; }
         protected BaseState CurrentState => BehaviourComponent.CurrentState;
         protected IStateSwitcher BehaviourComponent { set; get; }
         #endregion
@@ -61,7 +63,23 @@ namespace Ziggurat.Units
         protected virtual void Disable()
         {
             Selectable = false;
+            CanRegenerate = false;
+            CurrentState.Stop();
+            Target = null;            
             ClickComponent.Select(false);
+        }
+        protected virtual void Update()
+        {
+            if (!CanRegenerate || Health == MaxHealth) return;
+            if (_hpPerSec > 0)
+            {
+                _hpPerSec -= Time.deltaTime;
+            }
+            else
+            {
+                SetHealth((ushort)(Health + 1));
+                _hpPerSec = 1f;
+            }
         }
 
         public bool SetDamage(byte value) => SetDamage((ushort)value);
@@ -74,15 +92,22 @@ namespace Ziggurat.Units
             {
                 Health = 0;
                 Disable();
+                Behaviour = UnitState.Die;
                 BehaviourComponent.Die();
                 died?.Invoke();
             }
             return true;
         }
         public bool IsAllied(BaseUnit unit) => Owner == unit.Owner;
+        public void SetHealth(ushort value)
+        {
+            if (value <= MaxHealth) Health = value;
+            else Health = MaxHealth;
+        }
         public virtual void Idle()
         {
             Target = null;
+            Behaviour = UnitState.Idle;
         }
     }
 }
