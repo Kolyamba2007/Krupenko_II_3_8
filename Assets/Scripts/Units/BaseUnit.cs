@@ -5,6 +5,7 @@ using Ziggurat.UI;
 namespace Ziggurat.Units
 {
     [DisallowMultipleComponent]
+    [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(ClickComponent))]
     public abstract class BaseUnit : MonoBehaviour, ISelectable
     {
@@ -36,6 +37,7 @@ namespace Ziggurat.Units
         public ushort MaxHealth { protected set; get; }
         [field: SerializeField, RenameField("Owner"), Tooltip("Владелец юнита")]
         public Owner Owner { set; get; } = Owner.Neutral;
+        public Animator Animator { protected set; get; }
 
         private float _hpPerSec = 1f;
         #endregion
@@ -53,21 +55,11 @@ namespace Ziggurat.Units
 
         protected virtual void Awake()
         {
-            BehaviourComponent = new BaseUnitBehaviour(this); 
-
             ClickComponent = GetComponent<ClickComponent>();
             ClickComponent.selected += selected;
 
             Managers.GameManager.RegisterUnit(this);
-        }
-        protected virtual void Disable()
-        {
-            Selectable = false;
-            CanRegenerate = false;
-            CurrentState.Stop();
-            Target = null;            
-            ClickComponent.Select(false);
-        }
+        }      
         protected virtual void Update()
         {
             if (!CanRegenerate || Health == MaxHealth) return;
@@ -81,6 +73,14 @@ namespace Ziggurat.Units
                 _hpPerSec = 1f;
             }
         }
+        protected virtual void Disable()
+        {
+            Selectable = false;
+            CanRegenerate = false;
+            CurrentState.Stop();
+            Target = null;            
+            ClickComponent.Select(false);
+        }
 
         public bool SetDamage(byte value) => SetDamage((ushort)value);
         public bool SetDamage(ushort value)
@@ -91,10 +91,7 @@ namespace Ziggurat.Units
             else
             {
                 Health = 0;
-                Disable();
-                Behaviour = UnitState.Die;
-                BehaviourComponent.Die();
-                died?.Invoke();
+                BehaviourComponent.SwitchState<UnitDeadState>();
             }
             return true;
         }
@@ -108,6 +105,12 @@ namespace Ziggurat.Units
         {
             Target = null;
             Behaviour = UnitState.Idle;
+        }
+        public void Die()
+        {
+            Behaviour = UnitState.Die;
+            Disable();
+            died?.Invoke();
         }
     }
 }

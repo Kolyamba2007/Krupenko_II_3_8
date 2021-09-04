@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace Ziggurat.Units
 {
-    public class BaseUnitBehaviour : IStateSwitcher
+    public abstract class BaseUnitBehaviour : IStateSwitcher
     {
-        protected readonly BaseUnit Unit;
+        private readonly BaseUnit Unit;
         private List<BaseState> States { set; get; } = new List<BaseState>();
         public BaseState CurrentState { private set; get; }
         
@@ -15,17 +15,8 @@ namespace Ziggurat.Units
             Unit = unit;
             AddState<UnitIdleState>();
             AddState<UnitDeadState>();
-            CurrentState = new UnitIdleState(unit, this);
-        }
-
-        public void Idle()
-        {           
-            CurrentState.Idle();
-        }
-        public void Die()
-        {
-            CurrentState.Die();
-        }      
+            SwitchState<UnitIdleState>();
+        }   
 
         protected void AddState<T>() where T : BaseState
         {
@@ -33,9 +24,11 @@ namespace Ziggurat.Units
         }
         public void SwitchState<T>() where T : BaseState
         {
+            if (CurrentState is T) return;
+
             CurrentState?.Stop();
             CurrentState = States.FirstOrDefault(state => state is T);
-            CurrentState.Start();
+            CurrentState?.Start();
         }       
     }
 }
