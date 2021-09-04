@@ -15,9 +15,18 @@ namespace Ziggurat.Managers
 
         [SerializeField]
         private StatsConfiguration _statsConfig;
-        [Space, SerializeField]
+
+        [Header("Controllers")]
+        [SerializeField]
+        private CameraController _cameraController;
+
+        [Header("Managers")]
+        [SerializeField]
         private ResourcesManager _resourcesManager;
         [SerializeField]
+        private UIManager _UIManager;
+
+        [Space, SerializeField]
         private Transform _unitParent;
         [SerializeField]
         private Transform _poolPoint;
@@ -27,6 +36,8 @@ namespace Ziggurat.Managers
 
         private void Awake()
         {
+            _UIManager.Init(_cameraController);
+
             UnitDied += OnUnitDied;
         }
         private void Start()

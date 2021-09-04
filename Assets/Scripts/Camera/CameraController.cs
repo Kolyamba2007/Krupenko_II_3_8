@@ -1,27 +1,27 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 using static UnityEngine.InputSystem.InputAction;
 
 public class CameraController : MonoBehaviour
 {
-    float speed = 20f;
-    public NewInputSystem controls;
+    private float speed = 20f;
+    private float sensitivity = 10f;
 
-    public const float sensitivity = 10f;
+    private NewInputSystem controls;
+
+    public float Speed => speed;
+    public float Sensivity => sensitivity;
 
     private void Awake()
     {
         controls = new NewInputSystem();
     }
-
     private void OnEnable()
     {
         controls.Camera.Enable();
         controls.Camera.Lock.started += Lock;
         controls.Camera.Lock.canceled += Unlock;
     }
-
     private void OnDisable()
     {
         controls.Camera.Lock.started -= Lock;
@@ -29,17 +29,16 @@ public class CameraController : MonoBehaviour
         controls.Camera.Disable();
     }
 
-    void Lock(CallbackContext context)
+    private void Lock(CallbackContext context)
     {
         Cursor.lockState = CursorLockMode.Locked;
     }
-
-    void Unlock(CallbackContext context)
+    private void Unlock(CallbackContext context)
     {
         Cursor.lockState = CursorLockMode.Confined;
     }
 
-    void Update()
+    private void Update()
     {
         if (Cursor.lockState == CursorLockMode.Locked)
         {
@@ -55,5 +54,14 @@ public class CameraController : MonoBehaviour
                 transform.Translate(new Vector3(value.x, 0, value.y) * Time.deltaTime * speed, Space.Self);
             }
         }
+    }
+
+    public void SetSensivity(Slider slider)
+    {
+        sensitivity = slider.value;
+    }
+    public void SetSpeed(Slider slider)
+    {
+        speed = slider.value;
     }
 }

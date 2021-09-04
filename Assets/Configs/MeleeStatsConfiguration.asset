@@ -22,7 +22,7 @@ MonoBehaviour:
   _battleParams:
     FastAttackDamage: 5
     StrongAttackDamage: 10
-    CriticalMultiplier: 1
+    CriticalMultiplier: 1.35
     AttackCooldown: 1.5
   _probabilityParams:
     CriticalChance: 0.05
