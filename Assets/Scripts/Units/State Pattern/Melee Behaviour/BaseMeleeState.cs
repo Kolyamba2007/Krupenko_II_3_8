@@ -7,10 +7,11 @@ namespace Ziggurat.Units
     {
         protected readonly new BaseMelee Unit;
         protected readonly NavMeshAgent NavMeshAgent;
-        public BaseMeleeState(BaseMelee unit, IStateSwitcher stateSwitcher) : base(unit, stateSwitcher)
+
+        public BaseMeleeState(BaseMelee unit, MeleeBehaviour stateSwitcher) : base(unit, stateSwitcher)
         {
             Unit = unit;
-            NavMeshAgent = unit.NavMeshAgent;
+            NavMeshAgent = stateSwitcher.NavMeshAgent;
         }
 
         protected bool ArrivedToTarget()
@@ -27,7 +28,7 @@ namespace Ziggurat.Units
 
     class UnitMoveState : BaseMeleeState
     {
-        public UnitMoveState(BaseMelee unit, IStateSwitcher stateSwitcher) : base(unit, stateSwitcher) { }
+        public UnitMoveState(BaseMelee unit, MeleeBehaviour stateSwitcher) : base(unit, stateSwitcher) { }
 
         public override void Start()
         {
@@ -48,7 +49,7 @@ namespace Ziggurat.Units
     }
     class UnitSeekState : BaseMeleeState
     {
-        public UnitSeekState(BaseMelee unit, IStateSwitcher stateSwitcher) : base(unit, stateSwitcher) { }
+        public UnitSeekState(BaseMelee unit, MeleeBehaviour stateSwitcher) : base(unit, stateSwitcher) { }
 
         public override void Start()
         {
@@ -56,6 +57,7 @@ namespace Ziggurat.Units
         }
         public override void Stop()
         {
+            Unit.Animator.SetFloat("Movement", 0f);
         }
         public override void LogicUpdate()
         {
@@ -72,21 +74,22 @@ namespace Ziggurat.Units
     }
     class UnitAttackState : BaseMeleeState
     {
-        public UnitAttackState(BaseMelee unit, IStateSwitcher stateSwitcher) : base(unit, stateSwitcher) { }
+        public UnitAttackState(BaseMelee unit, MeleeBehaviour stateSwitcher) : base(unit, stateSwitcher) { }
 
         public override void Start()
         {
-            Unit.Attack(Unit.Target.Value.Target);
+            Unit.transform.LookAt(Unit.Target.Value.Position);
         }
         public override void Stop()
         {
-
+            Unit.Animator.SetBool("FastAttack", false);
+            Unit.Animator.SetBool("StrongAttack", false);
         }
         public override void LogicUpdate()
         {
-            if (ArrivedToTarget() && Unit.CanAttack)
+            if (ArrivedToTarget())
             {
-                Unit.Attack(Unit.Target.Value.Target);
+                if (Unit.CanAttack) Unit.SetAttackAnimation(Random.value);
             }
             else
             {
@@ -96,7 +99,7 @@ namespace Ziggurat.Units
     }
     class UnitWanderState : BaseMeleeState
     {
-        public UnitWanderState(BaseMelee unit, IStateSwitcher stateSwitcher) : base(unit, stateSwitcher) { }
+        public UnitWanderState(BaseMelee unit, MeleeBehaviour stateSwitcher) : base(unit, stateSwitcher) { }
 
         public override void Start()
         {

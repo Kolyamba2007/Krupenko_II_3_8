@@ -124,7 +124,7 @@ namespace Ziggurat.Managers
             {
                 var list = Units.Where(x => x is BaseMelee).ToList();
                 var nearestEnemy = FindNearestEnemy(unit, list);
-                if (nearestEnemy != null) melee.MoveTo(nearestEnemy);
+                if (nearestEnemy != null) melee.Attack(nearestEnemy);
                 else melee.MoveTo(poolPoint.Value);
             }
         }

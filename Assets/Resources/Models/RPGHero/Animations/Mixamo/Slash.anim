@@ -53242,22 +53242,15 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.53333336
-    functionName: OnAnimationEvent_UnityEditor
-    data: Collider
+    functionName: OnUnitAttack_UnityEditor
+    data: FastAttack
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
-    intParameter: 1301
-    messageOptions: 0
-  - time: 0.7
-    functionName: OnAnimationEvent_UnityEditor
-    data: Collider
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 1301
+    intParameter: 0
     messageOptions: 0
   - time: 1.5
-    functionName: OnActionEnd_UnityEditor
-    data: FastAttack
+    functionName: OnAnimationEnd_UnityEditor
+    data: Attack
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0

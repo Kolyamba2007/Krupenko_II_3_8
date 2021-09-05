@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 using Ziggurat.UI;
 
@@ -44,8 +45,7 @@ namespace Ziggurat.Units
 
         #region Behaviour
         public UnitState Behaviour { protected set; get; }
-        protected BaseState CurrentState => BehaviourComponent.CurrentState;
-        protected IStateSwitcher BehaviourComponent { set; get; }
+        protected IStateSwitcher BehaviourController { set; get; }
         #endregion
 
         #region Events
@@ -77,9 +77,14 @@ namespace Ziggurat.Units
         {
             Selectable = false;
             CanRegenerate = false;
-            CurrentState.Stop();
+            BehaviourController.Stop();
             Target = null;            
             ClickComponent.Select(false);
+        }
+
+        protected virtual void OnAnimationEnd_UnityEditor(string arg)
+        {
+
         }
 
         public bool SetDamage(byte value) => SetDamage((ushort)value);
@@ -90,8 +95,7 @@ namespace Ziggurat.Units
             if (Health - value > 0) Health -= value;
             else
             {
-                Health = 0;
-                BehaviourComponent.SwitchState<UnitDeadState>();
+                BehaviourController.SwitchState<UnitDeadState>();
             }
             return true;
         }
@@ -108,8 +112,10 @@ namespace Ziggurat.Units
         }
         public void Die()
         {
+            Health = 0;
             Behaviour = UnitState.Die;
             Disable();
+            Animator.Play("Die");
             died?.Invoke();
         }
     }

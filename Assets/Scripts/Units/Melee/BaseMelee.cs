@@ -9,6 +9,8 @@ namespace Ziggurat.Units
     [RequireComponent(typeof(NavMeshAgent))]
     public abstract class BaseMelee : BaseUnit, IMovable, IAttackable
     {
+        private BattleParamsData BattleParams;
+        private ProbabilityParamsData ProbabilityParams;
         private Rigidbody Rigidbody { set; get; }       
 
         public override UnitType UnitType => UnitType.Melee;
@@ -20,13 +22,13 @@ namespace Ziggurat.Units
         public float AttackCooldown { private set; get; }
         public NavMeshAgent NavMeshAgent { private set; get; }
 
-        protected new MeleeBehaviour BehaviourComponent { private set; get; }
-
         protected override void Awake()
         {
             base.Awake();
 
             StatsData data = GameManager.GetStats();
+            ProbabilityParams = data.ProbabilityParams;
+            BattleParams = data.BattleParams;
             MaxHealth = data.BaseParams.MaxHealth;
             Health = MaxHealth;
             MovementSpeed = data.MobilityParams.MoveSpeed;
@@ -38,12 +40,12 @@ namespace Ziggurat.Units
             NavMeshAgent.speed = MovementSpeed;
             NavMeshAgent.angularSpeed = data.MobilityParams.RotateSpeed;           
 
-            BehaviourComponent = new MeleeBehaviour(this, NavMeshAgent);
+            BehaviourController = new MeleeBehaviour(this, NavMeshAgent);
         }
         protected override void Update()
         {
             base.Update();
-            BehaviourComponent.CurrentState.LogicUpdate();
+            if (BehaviourController.IsActive) BehaviourController.CurrentState.LogicUpdate();
         }
         protected override void Disable()
         {
@@ -53,12 +55,49 @@ namespace Ziggurat.Units
             NavMeshAgent.isStopped = true;
         }
 
+        private void OnTargetDied()
+        {
+            Debug.Log($"Unit {Target.Value.Target.Name} [Owner = {Target.Value.Target.Owner}] died! This method was invoked by {Name} [Owner = {Owner}]");
+            Target.Value.Target.died -= OnTargetDied;
+            Target = null;
+            BehaviourController.SwitchState<UnitIdleState>();
+        }
+
+        private void OnUnitAttack_UnityEditor(string attackType)
+        {
+            if (!Target.HasValue) return;
+            switch (attackType)
+            {
+                case "FastAttack":
+                    Target.Value.Target.SetDamage(BattleParams.FastAttackDamage);
+                    break;
+                case "StrongAttack":
+                    Target.Value.Target.SetDamage(BattleParams.StrongAttackDamage);
+                    break;
+            }
+        }
+        protected override void OnAnimationEnd_UnityEditor(string arg)
+        {
+            base.OnAnimationEnd_UnityEditor(arg);
+            switch (arg)
+            {
+                case "Attack":
+                    if (CanAttack) StartCoroutine(AttackCoroutine());
+                    break;
+            }
+        }
+
+        public void SetAttackAnimation(float rand)
+        {
+            if (rand <= ProbabilityParams.StrongAttackChance) Animator.SetTrigger("StrongAttack");
+            else Animator.SetTrigger("FastAttack");
+        }
+
         public override void Idle()
         {
             base.Idle();
             NavMeshAgent.destination = Position;
             NavMeshAgent.isStopped = true;
-            Animator.SetFloat("Movement", 0f);
         }
         public virtual bool MoveTo(Vector3 point)
         {
@@ -69,7 +108,7 @@ namespace Ziggurat.Units
             NavMeshAgent.isStopped = false;
             Animator.SetFloat("Movement", 1f);
             Behaviour = UnitState.Move;
-            BehaviourComponent.SwitchState<UnitMoveState>();
+            BehaviourController.SwitchState<UnitMoveState>();
             return true;
         }
         public virtual bool MoveTo(Transform target)
@@ -80,7 +119,7 @@ namespace Ziggurat.Units
             NavMeshAgent.isStopped = false;
             Animator.SetFloat("Movement", 1f);
             Behaviour = UnitState.Move;
-            BehaviourComponent.SwitchState<UnitSeekState>();
+            BehaviourController.SwitchState<UnitSeekState>();
             return true;
         }
         public virtual bool MoveTo(BaseUnit target)
@@ -91,20 +130,18 @@ namespace Ziggurat.Units
             NavMeshAgent.isStopped = false;
             Animator.SetFloat("Movement", 1f);
             Behaviour = UnitState.Move;
-            BehaviourComponent.SwitchState<UnitSeekState>();
+            BehaviourController.SwitchState<UnitSeekState>();
             return true;
         }
         public virtual bool Attack(BaseUnit target)
         {
             if (Dead || target.Dead || target.Invulnerable) return false;
 
+            if (Target.HasValue) Target.Value.Target.died -= OnTargetDied;
+            target.died += OnTargetDied;
+            Target = new TargetPoint(target);
             Behaviour = UnitState.Attack;
-            if (CanAttack)
-            {
-                Animator.SetTrigger("FastAttack");
-                StartCoroutine(AttackCoroutine());
-            }
-            BehaviourComponent.SwitchState<UnitAttackState>();
+            BehaviourController.SwitchState<UnitAttackState>();
             return true;
         }
         private IEnumerator AttackCoroutine()
@@ -120,7 +157,7 @@ namespace Ziggurat.Units
             Target = new TargetPoint();
             NavMeshAgent.destination = Target.Value.Position;
             Behaviour = UnitState.Wander;
-            BehaviourComponent.SwitchState<UnitWanderState>();
+            BehaviourController.SwitchState<UnitWanderState>();
             return true;
         }
     }
