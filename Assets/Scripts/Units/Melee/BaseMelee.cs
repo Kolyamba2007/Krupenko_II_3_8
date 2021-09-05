@@ -53,14 +53,21 @@ namespace Ziggurat.Units
             CanMove = false;
             CanAttack = false;
             NavMeshAgent.isStopped = true;
+            Rigidbody.isKinematic = false;
+            Rigidbody.detectCollisions = false;
         }
 
         private void OnTargetDied()
         {
-            Debug.Log($"Unit {Target.Value.Target.Name} [Owner = {Target.Value.Target.Owner}] died! This method was invoked by {Name} [Owner = {Owner}]");
-            Target.Value.Target.died -= OnTargetDied;
-            Target = null;
-            BehaviourController.SwitchState<UnitIdleState>();
+            if (Target.HasValue)
+            {
+                Target.Value.Target.died -= OnTargetDied;
+                Target = null;
+            }
+
+            var nearestEnemy = this.FindNearestEnemy();
+            if (nearestEnemy != null) Attack(nearestEnemy);
+            else BehaviourController.SwitchState<UnitIdleState>();
         }
 
         private void OnUnitAttack_UnityEditor(string attackType)

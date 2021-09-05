@@ -10,7 +10,7 @@ namespace Ziggurat.Managers
 {
     public class GameManager : MonoBehaviour
     {
-        private static GameManager Instance => FindObjectOfType<GameManager>(); // Лучше так не делать, но пока сойдёт
+        private static GameManager Instance { set; get; }
         private static LinkedList<BaseUnit> Units = new LinkedList<BaseUnit>();
 
         [SerializeField]
@@ -27,6 +27,8 @@ namespace Ziggurat.Managers
         private UIManager _UIManager;
 
         [Space, SerializeField]
+        private ZigguratScript[] Ziggurats;
+        [SerializeField]
         private Transform _unitParent;
         [SerializeField]
         private Transform _poolPoint;
@@ -36,25 +38,28 @@ namespace Ziggurat.Managers
 
         private void Awake()
         {
+            if (Instance == null) Instance = this;
             _UIManager.Init(_cameraController);
 
             UnitDied += OnUnitDied;
         }
         private void Start()
         {
-            foreach (var unit in Units)
+            foreach (var unit in Ziggurats)
             {
-                if (unit is BaseManufacture)
+                unit.PoolPoint = _poolPoint.position;
+                unit.Manufactured += (type) =>
                 {
-                    var manufacture = unit as BaseManufacture;
-                    manufacture.PoolPoint = _poolPoint.position;
-                    manufacture.Manufactured += (type) =>
-                    {
-                        var newUnit = CreateUnit(type, manufacture.SpawnPoint.position, manufacture.Owner);
-                        OnUnitManufactured(newUnit, manufacture.PoolPoint);
-                    };
-                    manufacture.ProduceUnit<KnightScript>();
-                }
+                    var newUnit = CreateUnit(type, unit.SpawnPoint.position, unit.Owner);
+                    OnUnitManufactured(newUnit, unit.PoolPoint);
+                };
+            }
+        }
+        private void Update()
+        {
+            foreach (var unit in Ziggurats)
+            {
+                if (!unit.IsManufacturing) unit.ProduceUnit<KnightScript>();
             }
         }
 
@@ -95,35 +100,13 @@ namespace Ziggurat.Managers
             return component;
         }
 
-        #region Unit Events
-        private BaseUnit FindNearestEnemy(BaseUnit unit, IEnumerable<BaseUnit> list)
-        {
-            if (list.Count() == 0) return null;
-            list.ToList().Remove(unit);
-
-            BaseUnit enemy = null;
-            float minDist = float.MaxValue;
-
-            foreach (var target in list)
-            {
-                if (target.IsAllied(unit) || target.Invulnerable) continue;
-
-                float dist = Vector3.Distance(unit.Position, target.Position);
-                if (dist < minDist)
-                {
-                    minDist = dist;
-                    enemy = target;
-                }
-            }
-            return enemy;
-        }
-
+        #region Unit Events  
         private void OnUnitManufactured(BaseUnit unit, Vector3? poolPoint)
         {
             if (unit is BaseMelee melee)
             {
                 var list = Units.Where(x => x is BaseMelee).ToList();
-                var nearestEnemy = FindNearestEnemy(unit, list);
+                var nearestEnemy = melee.FindNearestEnemy();
                 if (nearestEnemy != null) melee.Attack(nearestEnemy);
                 else melee.MoveTo(poolPoint.Value);
             }

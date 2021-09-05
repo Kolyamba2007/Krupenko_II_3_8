@@ -245,5 +245,27 @@ namespace Ziggurat.Units
         {
             return (unit2.Position - unit1.Position).sqrMagnitude;
         }
+        public static BaseUnit FindNearestEnemy(this BaseUnit unit)
+        {
+            var list = GameManager.GetUnits();
+            if (list.Count() == 0) return null;
+            list.ToList().Remove(unit);
+
+            BaseUnit enemy = null;
+            float minDist = float.MaxValue;
+
+            foreach (var target in list)
+            {
+                if (target.IsAllied(unit) || target.Invulnerable) continue;
+
+                float dist = Vector3.Distance(unit.Position, target.Position);
+                if (dist < minDist)
+                {
+                    minDist = dist;
+                    enemy = target;
+                }
+            }
+            return enemy;
+        }
     }
 }

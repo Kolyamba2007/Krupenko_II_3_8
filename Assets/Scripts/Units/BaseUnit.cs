@@ -7,6 +7,7 @@ namespace Ziggurat.Units
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Animator))]
+    [RequireComponent(typeof(Collider))]
     [RequireComponent(typeof(ClickComponent))]
     public abstract class BaseUnit : MonoBehaviour, ISelectable
     {
@@ -29,6 +30,7 @@ namespace Ziggurat.Units
         #endregion
 
         #region Characteristics
+        private Collider Collider { set; get; }
         private ClickComponent ClickComponent { set; get; }  
 
         [field: Header("Характеристики")]
@@ -55,6 +57,7 @@ namespace Ziggurat.Units
 
         protected virtual void Awake()
         {
+            Collider = GetComponent<Collider>();
             ClickComponent = GetComponent<ClickComponent>();
             ClickComponent.selected += selected;
 
@@ -78,7 +81,8 @@ namespace Ziggurat.Units
             Selectable = false;
             CanRegenerate = false;
             BehaviourController.Stop();
-            Target = null;            
+            Target = null;
+            Collider.enabled = false;
             ClickComponent.Select(false);
         }
 
