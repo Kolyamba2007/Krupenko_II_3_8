@@ -74,13 +74,17 @@ namespace Ziggurat.Units
         private void OnUnitAttack_UnityEditor(string attackType)
         {
             if (!Target.HasValue || !ReachedTarget()) return;
+
+            float critRand = Random.value;
+            float critMultiplier = critRand <= ProbabilityParams.CriticalChance ? BattleParams.CriticalMultiplier : 1;
+
             switch (attackType)
             {
                 case "FastAttack":
-                    Target.Value.Target.SetDamage(BattleParams.FastAttackDamage);
+                    Target.Value.Target.SetDamage((ushort)(BattleParams.FastAttackDamage * critMultiplier));
                     break;
                 case "StrongAttack":
-                    Target.Value.Target.SetDamage(BattleParams.StrongAttackDamage);
+                    Target.Value.Target.SetDamage((ushort)(BattleParams.StrongAttackDamage * critMultiplier));
                     break;
             }
         }

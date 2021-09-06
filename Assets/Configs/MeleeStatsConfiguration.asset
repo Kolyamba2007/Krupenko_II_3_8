@@ -17,7 +17,7 @@ MonoBehaviour:
     MaxHealth: 20
     HPRegenPerSec: 1
   _mobilityParams:
-    MoveSpeed: 12
+    MoveSpeed: 8
     RotateSpeed: 200
   _battleParams:
     FastAttackDamage: 5
