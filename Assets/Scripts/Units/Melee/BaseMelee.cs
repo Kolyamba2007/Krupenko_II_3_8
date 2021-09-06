@@ -53,8 +53,9 @@ namespace Ziggurat.Units
             CanMove = false;
             CanAttack = false;
             NavMeshAgent.isStopped = true;
-            Rigidbody.isKinematic = false;
+            Rigidbody.isKinematic = true;
             Rigidbody.detectCollisions = false;
+            NavMeshAgent.enabled = false;
         }
 
         private void OnTargetDied()
@@ -72,7 +73,7 @@ namespace Ziggurat.Units
 
         private void OnUnitAttack_UnityEditor(string attackType)
         {
-            if (!Target.HasValue) return;
+            if (!Target.HasValue || !ReachedTarget()) return;
             switch (attackType)
             {
                 case "FastAttack":
@@ -166,6 +167,17 @@ namespace Ziggurat.Units
             Behaviour = UnitState.Wander;
             BehaviourController.SwitchState<UnitWanderState>();
             return true;
+        }
+
+        public bool ReachedTarget()
+        {
+            if (!Target.HasValue) return false;
+
+            Vector3 targetPos = Target.Value.Position;
+            targetPos.y = Position.y;
+            float remainingDistance = (targetPos - Position).sqrMagnitude;
+            float stoppingDistance = NavMeshAgent.stoppingDistance * NavMeshAgent.stoppingDistance;
+            return remainingDistance <= stoppingDistance;
         }
     }
 }

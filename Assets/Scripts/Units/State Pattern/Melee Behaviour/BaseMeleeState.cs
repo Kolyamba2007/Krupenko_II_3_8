@@ -13,17 +13,6 @@ namespace Ziggurat.Units
             Unit = unit;
             NavMeshAgent = stateSwitcher.NavMeshAgent;
         }
-
-        protected bool ArrivedToTarget()
-        {
-            if (!Unit.Target.HasValue) return false;
-
-            Vector3 targetPos = Unit.Target.Value.Position;
-            targetPos.y = Unit.Position.y;
-            float remainingDistance = (targetPos - Unit.Position).sqrMagnitude;
-            float stoppingDistance = NavMeshAgent.stoppingDistance * NavMeshAgent.stoppingDistance;
-            return remainingDistance <= stoppingDistance;
-        }
     }
 
     class UnitMoveState : BaseMeleeState
@@ -40,7 +29,7 @@ namespace Ziggurat.Units
         }
         public override void LogicUpdate()
         {
-            if (ArrivedToTarget()) StateSwitcher.SwitchState<UnitIdleState>();
+            if (Unit.ReachedTarget()) StateSwitcher.SwitchState<UnitIdleState>();
             else
             {
                 NavMeshAgent.SetDestination(Unit.Target.Value.Position);
@@ -61,7 +50,7 @@ namespace Ziggurat.Units
         }
         public override void LogicUpdate()
         {
-            if (ArrivedToTarget())
+            if (Unit.ReachedTarget())
             {
                 if (Unit.IsAllied(Unit.Target.Value.Target)) StateSwitcher.SwitchState<UnitIdleState>();
                 else StateSwitcher.SwitchState<UnitAttackState>();
@@ -87,7 +76,7 @@ namespace Ziggurat.Units
         }
         public override void LogicUpdate()
         {
-            if (ArrivedToTarget())
+            if (Unit.ReachedTarget())
             {
                 if (Unit.CanAttack) Unit.SetAttackAnimation(Random.value);
             }
