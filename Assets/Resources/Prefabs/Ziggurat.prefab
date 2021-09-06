@@ -94,8 +94,6 @@ MonoBehaviour:
   _renderer: {fileID: 8456266756349227876}
   <Selectable>k__BackingField: 1
   _outlineWidth: 0.5
-  panelAnim: {fileID: 3638071465679222465, guid: d584e0e5e685ae34d926e0091ef6da4a,
-    type: 3}
 --- !u!114 &852649134204459658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,6 +117,7 @@ MonoBehaviour:
   ProgressBar:
     _value: 0
     Label: Progress
+  _config: {fileID: 11400000, guid: b922066fae7471b4186c67b78eeb570f, type: 2}
 --- !u!65 &8456266757046948832
 BoxCollider:
   m_ObjectHideFlags: 0

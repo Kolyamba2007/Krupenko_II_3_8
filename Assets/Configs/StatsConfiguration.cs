@@ -5,7 +5,7 @@ using Ziggurat.Units;
 namespace Ziggurat.Configuration
 {
 	[CreateAssetMenu(fileName = "NewStatsConfiguration", menuName = "Configurations/StatsConfiguration")]
-	public class StatsConfiguration : ScriptableObject
+	public class StatsConfiguration : BaseUnitStats
 	{
 		[SerializeField, Tooltip("Тип юнита"), OneLine, Highlight(0.05f, 0.72f, 0.62f)]
 		private UnitType _unitType;
@@ -25,7 +25,7 @@ namespace Ziggurat.Configuration
 		/// <summary>
 		/// Возвращает свойства юнита
 		/// </summary>
-		public StatsData AllProperties => new StatsData { BaseParams = _baseParams, BattleParams = _battleParams, MobilityParams = _mobilityParams, ProbabilityParams = _probabilityParams };
+		public override StatsData AllProperties => new StatsData { BaseParams = _baseParams, BattleParams = _battleParams, MobilityParams = _mobilityParams, ProbabilityParams = _probabilityParams };
 		/// <summary>
 		/// Возвращает базовые параметры юнита
 		/// </summary>
@@ -42,5 +42,13 @@ namespace Ziggurat.Configuration
 		/// Возвращает параметры вероятностей юнита
 		/// </summary>
 		public ProbabilityParamsData ProbabilityParams => _probabilityParams;
-	}
+
+        public override void SetStats(StatsData data)
+        {
+			_baseParams = data.BaseParams;
+			_mobilityParams = data.MobilityParams;
+			_battleParams = data.BattleParams;
+			_probabilityParams = data.ProbabilityParams;
+		}
+    }
 }

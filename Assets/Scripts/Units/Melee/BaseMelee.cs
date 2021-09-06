@@ -22,23 +22,25 @@ namespace Ziggurat.Units
         public float MovementSpeed { private set; get; }
         public float AttackCooldown { private set; get; }
 
+        public override void SetParams(StatsData data)
+        {
+            base.SetParams(data);
+            ProbabilityParams = data.ProbabilityParams;
+            BattleParams = data.BattleParams;
+            MovementSpeed = data.MobilityParams.MoveSpeed;
+            AttackCooldown = data.BattleParams.AttackCooldown;
+
+            NavMeshAgent.speed = MovementSpeed;
+            NavMeshAgent.angularSpeed = data.MobilityParams.RotateSpeed;     
+        }
+
         protected override void Awake()
         {
             base.Awake();
 
-            StatsData data = GameManager.GetStats();
-            ProbabilityParams = data.ProbabilityParams;
-            BattleParams = data.BattleParams;
-            MaxHealth = data.BaseParams.MaxHealth;
-            Health = MaxHealth;
-            MovementSpeed = data.MobilityParams.MoveSpeed;
-            AttackCooldown = data.BattleParams.AttackCooldown;
-
             Animator = GetComponent<Animator>();
             Rigidbody = GetComponent<Rigidbody>();
-            NavMeshAgent = GetComponent<NavMeshAgent>();
-            NavMeshAgent.speed = MovementSpeed;
-            NavMeshAgent.angularSpeed = data.MobilityParams.RotateSpeed;           
+            NavMeshAgent = GetComponent<NavMeshAgent>();                 
 
             BehaviourController = new MeleeBehaviour(this, NavMeshAgent);
         }
@@ -94,7 +96,7 @@ namespace Ziggurat.Units
             switch (arg)
             {
                 case "Attack":
-                    if (CanAttack) StartCoroutine(AttackCoroutine());
+                    StartCoroutine(AttackCoroutine());
                     break;
             }
         }

@@ -54,6 +54,12 @@ namespace Ziggurat.Units
         public event Action selected;
         #endregion
 
+        public virtual void SetParams(StatsData data)
+        {
+            MaxHealth = data.BaseParams.MaxHealth;
+            Health = MaxHealth;           
+        }
+
         protected virtual void Awake()
         {
             Collider = GetComponent<Collider>();
@@ -121,5 +127,7 @@ namespace Ziggurat.Units
             Animator.Play("Die");
             died?.Invoke();
         }
+
+        public abstract StatsData GetStats();
     }
 }

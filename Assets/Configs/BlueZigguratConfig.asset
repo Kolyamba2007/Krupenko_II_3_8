@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8199b457ae207b049afdb3188e8c39fd, type: 3}
-  m_Name: MeleeStatsConfiguration
+  m_Name: BlueZigguratConfig
   m_EditorClassIdentifier: 
-  _unitType: 1
+  _unitType: 0
   _baseParams:
-    MaxHealth: 20
-    HPRegenPerSec: 1
+    MaxHealth: 10
+    HPRegenPerSec: 0
   _mobilityParams:
     MoveSpeed: 8
     RotateSpeed: 200
   _battleParams:
     FastAttackDamage: 5
     StrongAttackDamage: 10
-    CriticalMultiplier: 1.35
-    AttackCooldown: 5
+    CriticalMultiplier: 1
+    AttackCooldown: 1.5
   _probabilityParams:
     CriticalChance: 0.05
     MissChance: 0.25

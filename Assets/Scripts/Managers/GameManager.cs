@@ -35,7 +35,8 @@ namespace Ziggurat.Managers
 
         public event Action<BaseUnit> UnitCreated;
         public event Action<BaseUnit> UnitDied;
-        public event Action<BaseUnit> UnitSelected;
+
+        public static BaseUnit SelectedUnit;
 
         [SerializeField]
         private Animator panelAnim;
@@ -55,6 +56,7 @@ namespace Ziggurat.Managers
                 unit.Manufactured += (type) =>
                 {
                     var newUnit = CreateUnit(type, unit.SpawnPoint.position, unit.Owner);
+                    newUnit.SetParams(unit.GetStats());
                     OnUnitManufactured(newUnit, unit.PoolPoint);
                 };
             }
@@ -131,10 +133,13 @@ namespace Ziggurat.Managers
         {
             if (Units.Contains(unit)) return;
             unit.died += () => Instance.UnitDied?.Invoke(unit);
-            unit.selected += () => Instance._UIManager.ChangingUnitParam(unit);
+            unit.selected += () =>
+            {
+                SelectedUnit = unit;
+                Instance._UIManager.ChangingUnitParam(unit);
+            };
             Units.AddLast(unit);
         }
-
 
         public static IReadOnlyList<BaseUnit> GetUnits() => Units.ToList();
         public static StatsData GetStats() => Instance._statsConfig.AllProperties;
