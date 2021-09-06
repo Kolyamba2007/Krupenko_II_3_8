@@ -9,8 +9,7 @@ namespace Ziggurat.Units
     [RequireComponent(typeof(NavMeshAgent))]
     public abstract class BaseMelee : BaseUnit, IMovable, IAttackable
     {
-        private BattleParamsData BattleParams;
-        private ProbabilityParamsData ProbabilityParams;
+        StatsData statsData;
         private Rigidbody Rigidbody { set; get; }       
         private NavMeshAgent NavMeshAgent { set; get; }
 
@@ -25,10 +24,10 @@ namespace Ziggurat.Units
         public override void SetParams(StatsData data)
         {
             base.SetParams(data);
-            ProbabilityParams = data.ProbabilityParams;
-            BattleParams = data.BattleParams;
             MovementSpeed = data.MobilityParams.MoveSpeed;
             AttackCooldown = data.BattleParams.AttackCooldown;
+
+            statsData = data;
 
             NavMeshAgent.speed = MovementSpeed;
             NavMeshAgent.angularSpeed = data.MobilityParams.RotateSpeed;     
@@ -78,15 +77,15 @@ namespace Ziggurat.Units
             if (!Target.HasValue || !ReachedTarget()) return;
 
             float critRand = Random.value;
-            float critMultiplier = critRand <= ProbabilityParams.CriticalChance ? BattleParams.CriticalMultiplier : 1;
+            float critMultiplier = critRand <= statsData.ProbabilityParams.CriticalChance ? statsData.BattleParams.CriticalMultiplier : 1;
 
             switch (attackType)
             {
                 case "FastAttack":
-                    Target.Value.Target.SetDamage((ushort)(BattleParams.FastAttackDamage * critMultiplier));
+                    Target.Value.Target.SetDamage((ushort)(statsData.BattleParams.FastAttackDamage * critMultiplier));
                     break;
                 case "StrongAttack":
-                    Target.Value.Target.SetDamage((ushort)(BattleParams.StrongAttackDamage * critMultiplier));
+                    Target.Value.Target.SetDamage((ushort)(statsData.BattleParams.StrongAttackDamage * critMultiplier));
                     break;
             }
         }
@@ -103,15 +102,18 @@ namespace Ziggurat.Units
 
         public void SetAttackAnimation(float rand)
         {
-            if (rand <= ProbabilityParams.StrongAttackChance) Animator.SetTrigger("StrongAttack");
+            if (rand <= statsData.ProbabilityParams.StrongAttackChance) Animator.SetTrigger("StrongAttack");
             else Animator.SetTrigger("FastAttack");
         }
 
         public override void Idle()
         {
             base.Idle();
-            NavMeshAgent.destination = Position;
-            NavMeshAgent.isStopped = true;
+            if (NavMeshAgent != null)
+            {
+                NavMeshAgent.destination = Vector3.zero;
+                NavMeshAgent.isStopped = true;
+            }
         }
         public virtual bool MoveTo(Vector3 point)
         {
@@ -185,6 +187,11 @@ namespace Ziggurat.Units
             float remainingDistance = (targetPos - Position).sqrMagnitude;
             float stoppingDistance = NavMeshAgent.stoppingDistance * NavMeshAgent.stoppingDistance;
             return remainingDistance <= stoppingDistance;
+        }
+
+        public override StatsData GetStats()
+        {
+            return statsData;
         }
     }
 }

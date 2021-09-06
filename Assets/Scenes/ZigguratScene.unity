@@ -634,6 +634,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: c435a537c8a27a449835e26f77f30700,
         type: 2}
+    - target: {fileID: 852649134204459658, guid: f64799e26f7d0cf47b2eb8ef3fccea78,
+        type: 3}
+      propertyPath: _productionTime
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 852649134204459658, guid: f64799e26f7d0cf47b2eb8ef3fccea78,
+        type: 3}
+      propertyPath: <Invulnerable>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 852649134204459658, guid: f64799e26f7d0cf47b2eb8ef3fccea78,
+        type: 3}
+      propertyPath: <CanRegenerate>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8456266756083152448, guid: f64799e26f7d0cf47b2eb8ef3fccea78,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -872,7 +887,18 @@ MonoBehaviour:
   m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 610291142}
+        m_MethodName: UpdateParam
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: MissChance
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &93308125
 GameObject:
   m_ObjectHideFlags: 0
@@ -3340,8 +3366,18 @@ MonoBehaviour:
   _mouseSensivitySlider: {fileID: 1281487862}
   HealthSlider: {fileID: 2116635464}
   DamageRatioSlider: {fileID: 2089685923}
+  MovementSpeedSlider: {fileID: 1076394056}
+  FastAttackSlider: {fileID: 1464089106}
+  SlowAttackSlider: {fileID: 1891077661}
+  DoubleDamageSlider: {fileID: 869245697}
+  MissSlider: {fileID: 90969703}
   HealthText: {fileID: 10397560}
   DamageRatioText: {fileID: 1751488817}
+  MovementSpeedText: {fileID: 1787774588}
+  FastAttackText: {fileID: 1989435257}
+  SlowAttackText: {fileID: 720273171}
+  DoubleDamageText: {fileID: 273988948}
+  MissText: {fileID: 249317820}
   panelAnim: {fileID: 1682027389}
 --- !u!1 &622658356
 GameObject:
@@ -3526,8 +3562,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -138.9, y: 36}
-  m_SizeDelta: {x: 250, y: 30}
+  m_AnchoredPosition: {x: -132.6, y: 36}
+  m_SizeDelta: {x: 262.22, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &678471341
 MonoBehaviour:
@@ -3561,7 +3597,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Double Damage Chance
+  m_Text: Critical Damage Chance
 --- !u!222 &678471342
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5120,7 +5156,18 @@ MonoBehaviour:
   m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 610291142}
+        m_MethodName: UpdateParam
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: DoubleDamageChance
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &917750723
 GameObject:
   m_ObjectHideFlags: 0
@@ -6114,7 +6161,18 @@ MonoBehaviour:
   m_Value: 5
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 610291142}
+        m_MethodName: UpdateParam
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Speed
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1079048311
 GameObject:
   m_ObjectHideFlags: 0
@@ -8531,7 +8589,18 @@ MonoBehaviour:
   m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 610291142}
+        m_MethodName: UpdateParam
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: FastAttack
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1503497102
 GameObject:
   m_ObjectHideFlags: 0
@@ -10207,6 +10276,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: f5671ba4bc856794e888555fab198e57,
         type: 2}
+    - target: {fileID: 852649134204459658, guid: f64799e26f7d0cf47b2eb8ef3fccea78,
+        type: 3}
+      propertyPath: _productionTime
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 852649134204459658, guid: f64799e26f7d0cf47b2eb8ef3fccea78,
+        type: 3}
+      propertyPath: <Invulnerable>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 852649134204459658, guid: f64799e26f7d0cf47b2eb8ef3fccea78,
+        type: 3}
+      propertyPath: <CanRegenerate>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8456266756083152448, guid: f64799e26f7d0cf47b2eb8ef3fccea78,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -10733,7 +10817,18 @@ MonoBehaviour:
   m_Value: 20
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 610291142}
+        m_MethodName: UpdateParam
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: SlowAttack
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1893807189
 GameObject:
   m_ObjectHideFlags: 0
@@ -11429,14 +11524,14 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 610291142}
-        m_MethodName: DamageRatioTextChanging
-        m_Mode: 1
+        m_MethodName: UpdateParam
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: DamageRatio
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &2097208581
@@ -11693,14 +11788,14 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 610291142}
-        m_MethodName: HealthTextChanging
-        m_Mode: 1
+        m_MethodName: UpdateParam
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Health
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1001 &8456266755214359711
@@ -11724,6 +11819,21 @@ PrefabInstance:
         type: 3}
       propertyPath: <Health>k__BackingField
       value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 852649134204459658, guid: f64799e26f7d0cf47b2eb8ef3fccea78,
+        type: 3}
+      propertyPath: _productionTime
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 852649134204459658, guid: f64799e26f7d0cf47b2eb8ef3fccea78,
+        type: 3}
+      propertyPath: <Invulnerable>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 852649134204459658, guid: f64799e26f7d0cf47b2eb8ef3fccea78,
+        type: 3}
+      propertyPath: <CanRegenerate>k__BackingField
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8456266756083152448, guid: f64799e26f7d0cf47b2eb8ef3fccea78,
         type: 3}

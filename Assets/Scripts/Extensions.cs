@@ -247,17 +247,16 @@ namespace Ziggurat.Units
         }
         public static BaseUnit FindNearestEnemy(this BaseUnit unit)
         {
-            var list = GameManager.GetUnits();
-            if (list.Count() == 0) return null;
-            list.ToList().Remove(unit);
+            var list = GameManager.GetUnits().ToList();
+            if (list.Count() == 0 || unit == null) return null;
+            list.Remove(unit);
+            list.RemoveAll(x => x.Dead || x.Invulnerable || x.IsAllied(unit));
 
             BaseUnit enemy = null;
             float minDist = float.MaxValue;
 
             foreach (var target in list)
             {
-                if (target.IsAllied(unit) || target.Invulnerable || target.Dead) continue;
-
                 float dist = Vector3.Distance(unit.Position, target.Position);
                 if (dist < minDist)
                 {

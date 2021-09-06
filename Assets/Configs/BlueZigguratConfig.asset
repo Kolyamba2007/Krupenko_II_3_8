@@ -17,14 +17,14 @@ MonoBehaviour:
     MaxHealth: 10
     HPRegenPerSec: 0
   _mobilityParams:
-    MoveSpeed: 8
+    MoveSpeed: 10
     RotateSpeed: 200
   _battleParams:
-    FastAttackDamage: 5
-    StrongAttackDamage: 10
-    CriticalMultiplier: 1
+    FastAttackDamage: 17
+    StrongAttackDamage: 50
+    CriticalMultiplier: 2
     AttackCooldown: 1.5
   _probabilityParams:
-    CriticalChance: 0.05
-    MissChance: 0.25
-    StrongAttackChance: 0.35
+    CriticalChance: 0.04
+    MissChance: 0.22
+    StrongAttackChance: 0.4

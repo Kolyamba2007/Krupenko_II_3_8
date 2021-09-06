@@ -14,15 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _unitType: 1
   _baseParams:
-    MaxHealth: 20
+    MaxHealth: 80
     HPRegenPerSec: 1
   _mobilityParams:
-    MoveSpeed: 8
+    MoveSpeed: 25
     RotateSpeed: 200
   _battleParams:
-    FastAttackDamage: 5
-    StrongAttackDamage: 10
-    CriticalMultiplier: 1.35
+    FastAttackDamage: 14
+    StrongAttackDamage: 35
+    CriticalMultiplier: 2
     AttackCooldown: 1
   _probabilityParams:
     CriticalChance: 0.25

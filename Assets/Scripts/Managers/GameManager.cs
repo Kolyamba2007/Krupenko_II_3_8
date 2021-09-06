@@ -104,7 +104,6 @@ namespace Ziggurat.Managers
                 component = (BaseUnit)unit.GetComponent(type);
                 component.Owner = owner;
                 component.SetColor(Colors[owner]);
-                component.died += () => UnitDied?.Invoke(component);
 
                 unit.name = component.Name;              
 
@@ -140,7 +139,11 @@ namespace Ziggurat.Managers
         public static void RegisterUnit(BaseUnit unit)
         {
             if (Units.Contains(unit)) return;
-            unit.died += () => Instance.UnitDied?.Invoke(unit);
+            unit.died += () =>
+            {
+                Instance.RemoveUnit(unit);
+                Instance.UnitDied?.Invoke(unit);
+            };
             unit.selected += () =>
             {
                 SelectedUnit = unit;
