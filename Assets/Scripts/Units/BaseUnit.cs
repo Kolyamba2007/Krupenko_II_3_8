@@ -114,6 +114,13 @@ namespace Ziggurat.Units
             if (value <= MaxHealth) Health = value;
             else Health = MaxHealth;
         }
+        public void SetColor(Color color, float alpha = 0.75f)
+        {
+            foreach (var renderer in GetComponentsInChildren<Renderer>())
+            {
+                renderer.material.color = new Color(color.r, color.g, color.b, alpha);
+            }
+        }
         public virtual void Idle()
         {
             Target = null;

@@ -178,6 +178,7 @@ namespace Ziggurat.Units
         public bool ReachedTarget()
         {
             if (!Target.HasValue) return false;
+            if ((Target.Value.Target != null && Target.Value.Target.Dead) || Dead) return false;
 
             Vector3 targetPos = Target.Value.Position;
             targetPos.y = Position.y;

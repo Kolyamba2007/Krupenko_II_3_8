@@ -13,6 +13,13 @@ namespace Ziggurat.Managers
         private static GameManager Instance { set; get; }
         private static LinkedList<BaseUnit> Units = new LinkedList<BaseUnit>();
 
+        private static Dictionary<Owner, Color> Colors = new Dictionary<Owner, Color>()
+        {
+            { Owner.Red, Color.red },
+            { Owner.Green, Color.green },
+            { Owner.Blue, Color.blue },
+        };
+
         [SerializeField]
         private StatsConfiguration _statsConfig;
 
@@ -96,6 +103,7 @@ namespace Ziggurat.Managers
                 if (!unit.GetComponent(type)) unit.AddComponent(type);
                 component = (BaseUnit)unit.GetComponent(type);
                 component.Owner = owner;
+                component.SetColor(Colors[owner]);
                 component.died += () => UnitDied?.Invoke(component);
 
                 unit.name = component.Name;              

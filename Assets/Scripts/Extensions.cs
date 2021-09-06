@@ -256,7 +256,7 @@ namespace Ziggurat.Units
 
             foreach (var target in list)
             {
-                if (target.IsAllied(unit) || target.Invulnerable) continue;
+                if (target.IsAllied(unit) || target.Invulnerable || target.Dead) continue;
 
                 float dist = Vector3.Distance(unit.Position, target.Position);
                 if (dist < minDist)
