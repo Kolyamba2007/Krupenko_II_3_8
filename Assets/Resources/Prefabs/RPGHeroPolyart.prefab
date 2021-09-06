@@ -2168,6 +2168,8 @@ MonoBehaviour:
   _renderer: {fileID: 137211737089033600}
   <Selectable>k__BackingField: 1
   _outlineWidth: 0.2
+  panelAnim: {fileID: 3638071465679222465, guid: d584e0e5e685ae34d926e0091ef6da4a,
+    type: 3}
 --- !u!114 &2944719232520656399
 MonoBehaviour:
   m_ObjectHideFlags: 0
