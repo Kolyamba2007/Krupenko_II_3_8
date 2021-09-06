@@ -12,6 +12,7 @@ namespace Ziggurat.Units
         private BattleParamsData BattleParams;
         private ProbabilityParamsData ProbabilityParams;
         private Rigidbody Rigidbody { set; get; }       
+        private NavMeshAgent NavMeshAgent { set; get; }
 
         public override UnitType UnitType => UnitType.Melee;
 
@@ -20,7 +21,6 @@ namespace Ziggurat.Units
 
         public float MovementSpeed { private set; get; }
         public float AttackCooldown { private set; get; }
-        public NavMeshAgent NavMeshAgent { private set; get; }
 
         protected override void Awake()
         {
