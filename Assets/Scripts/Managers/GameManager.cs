@@ -35,6 +35,10 @@ namespace Ziggurat.Managers
 
         public event Action<BaseUnit> UnitCreated;
         public event Action<BaseUnit> UnitDied;
+        public event Action<BaseUnit> UnitSelected;
+
+        [SerializeField]
+        private Animator panelAnim;
 
         private void Awake()
         {
@@ -127,8 +131,11 @@ namespace Ziggurat.Managers
         {
             if (Units.Contains(unit)) return;
             unit.died += () => Instance.UnitDied?.Invoke(unit);
+            unit.selected += () => Instance._UIManager.ChangingUnitParam(unit);
             Units.AddLast(unit);
         }
+
+
         public static IReadOnlyList<BaseUnit> GetUnits() => Units.ToList();
         public static StatsData GetStats() => Instance._statsConfig.AllProperties;
     }

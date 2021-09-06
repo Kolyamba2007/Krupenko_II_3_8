@@ -58,7 +58,7 @@ namespace Ziggurat.Units
         {
             Collider = GetComponent<Collider>();
             ClickComponent = GetComponent<ClickComponent>();
-            ClickComponent.selected += selected;
+            ClickComponent.selected += () => { selected.Invoke(); };
 
             Managers.GameManager.RegisterUnit(this);
         }      
